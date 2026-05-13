@@ -1,0 +1,529 @@
+1 %%-Regelung — a simplified method for taxing private use of a company car. The taxable benefit is calculated as 1 %% of the vehicle’s original manufacturer list price per month, regardless of how much the car is actually used privately.
+A MobilityCheck administrator must assign you at least one role (driver, fleet manager, fleet admin, workshop or auditor) before you can open the app.
+A live, role-aware snapshot. Numbers update when you reload this page.
+A reason is required.
+A short label used on dashboards, e.g. “Pool 1”.
+Access denied.
+Access mode
+Access, policy and defaults
+Action
+Actions
+Active
+Active session context
+Actor
+Add
+Add a Nextcloud user as a driver to get started.
+Add driver
+Add maintenance schedule
+Add photo
+Add schedule
+Add vehicle
+Adjust your filters or add a vehicle from the action above.
+Administrator
+All
+All active
+All details of one booking, including check-out and check-in steps.
+All facts about one vehicle: bookings, damage, costs and maintenance.
+All open and closed damage reports for this vehicle.
+All vehicles currently on the books. Decommissioned vehicles are hidden by default.
+Allowed groups (one per line)
+Amendment
+Amendments
+Annual instruction and licence status across all drivers.
+Annual instruction records and licence verification log.
+Annual safety briefing (UVV)
+Another booking overlaps the selected timeframe (booking #{id}).
+App access policy
+App configuration: access policy, defaults, role assignment and audit log.
+Append-only record of every action performed inside MobilityCheck.
+Approval workflow
+Approve
+Approved
+Approved and active bookings starting today or later.
+Approved — collect the vehicle at the start time
+Are you sure you want to decommission this vehicle? Future approved bookings will be cancelled. This cannot be undone.
+Ask a Nextcloud or MobilityCheck administrator to add you to the allowed users or groups in MobilityCheck → Settings → Access.
+Ask your fleet manager to set up your profile.
+Assign MobilityCheck roles to existing Nextcloud users. Roles can be combined (e.g. manager + driver).
+Assigned incidents and repairs
+Audit
+Audit log
+Auditor
+Auditor & driver
+Authority
+Automatic
+Available
+Available vehicles
+Back to home
+Back to list
+Base location
+Block new bookings when overdue
+Blocking
+Blocking only
+Blocks bookings
+Booked
+Booking
+Booking approved.
+Booking cancelled.
+Booking filters
+Booking has been cancelled
+Booking has been checked in and closed
+Booking loaded.
+Booking overdue check-in
+Booking rejected.
+Booking submitted.
+Booking was rejected
+Bookings
+Bookings need manager approval before drivers may check out
+Bookings report
+Bookings waiting for a decision
+Breadcrumb
+Briefly describe the business purpose. Required for audit purposes (Fahrtenbuch).
+Browse, approve and manage vehicle bookings.
+Bruttolistenpreis — the manufacturer’s original recommended retail price including VAT, at the time of the vehicle’s first registration. This is not the purchase price and not the current resale value.
+Calendar interval
+Calendar interval (months)
+Cancel
+Cancel my booking
+Cancel this booking? This cannot be undone.
+Cancellation reason
+Cancellation reason (optional):
+Cancelled
+Category
+Category ID
+Channel
+Check in
+Check in vehicle
+Check out
+Check out vehicle
+Check-in
+Check-in grace minutes
+Check-in recorded. Trip complete.
+Check-out
+Check-out and check-in
+Check-out recorded.
+Classes
+Classes (e.g. B BE C1)
+Close (no action)
+Closed (no action)
+Colour
+Comma or dot decimal — net and VAT are calculated.
+Commute distance (km, one way)
+Completed
+Completed date (YYYY-MM-DD):
+Compliance
+Compliance history
+Compliance status
+Condition checklist — tick every zone that is undamaged
+Condition notes (optional)
+Confirm
+Confirm check-in
+Confirm check-out
+Corrections create a new amendment row — original reports are immutable.
+Cost centre
+Cost entries
+Cost entry recorded.
+Cost filters
+Cost report
+Costs
+Create vehicle
+Created at
+Currency (ISO 4217)
+Currency, VAT rate, approval workflow, and other knobs that affect every record.
+Current instruction
+Current status and priorities
+Damage
+Damage filters
+Damage history
+Damage report
+Damage report created. Adding photos is recommended.
+Damage report loaded.
+Damage reports
+Damage reports that still need attention, ordered by discovery date.
+Dashboard
+Dashboard updated.
+Date
+Days to expiry
+Decommission
+Default 10 MB. Files larger than this are rejected.
+Default VAT rate
+Default timezone
+Defaults saved.
+Description
+Destination
+Details
+Diesel
+Discovered
+Discovered at
+Display name
+Distance
+Driveable
+Driver
+Driver compliance
+Driver loaded.
+Driver profile
+Driver profile created.
+Driver profile saved.
+Driver records, licence verification, and annual instruction.
+Driver register
+Drivers
+Drivers see their own bookings here. Managers see every booking in the fleet.
+Drivers waiting for your decision before they can pick up their vehicle.
+Driving licence expired
+Driving licence verification
+Due
+Due date
+Due odometer
+Each driver must complete the yearly safety briefing during the calendar year.
+Edit
+Electric
+End
+Entity
+Entity type
+Entry date
+Erste Tätigkeitsstätte — your regular, primary workplace. Trips between home and this location are classified as commute trips and are subject to their own tax rules.
+Event
+Exact Nextcloud group IDs. Leave empty to use the default fleet group.
+Expected distance
+Expected distance (km)
+Expired
+Expires
+Expiring soon
+Expiry
+Expiry at check
+Expiry date
+Fahrtenbuch — a legally required trip log that records every journey made in a company car. It is the basis for calculating the exact taxable private-use benefit instead of using the flat 1 %% rule.
+Fahrtkostenabrechnung — a reimbursement claim for trips made using your own private vehicle for business purposes. You are entitled to a set rate per kilometre under German tax law.
+Fahrunterweisung — the annual safety and usage briefing every driver in Germany must complete. MobilityCheck does not replace the briefing; it tracks completion per driver and calendar year.
+File reference
+Files are stored in your Nextcloud “MobilityCheck/licence-scans/” folder.
+Fleet administrator
+Fleet and carsharing
+Fleet inventory
+Fleet manager
+Fleet manager & driver
+From
+From today onwards
+Fuel
+Fuel level
+Fuel type
+Fuel, repairs and VAT records
+Fuel, repairs, insurance, road tax — all monetary movements per vehicle. Net and VAT are computed from the gross you enter.
+Geldwerter Vorteil — the taxable financial benefit of using a company car for private purposes. This amount is added to your gross salary and taxed accordingly.
+GoBD — Principles for the proper maintenance of digital records, issued by the German tax authorities. MobilityCheck follows these rules to ensure all records are legally admissible as evidence.
+Governance
+Gross
+Gross amount
+Hide
+Hybrid (diesel)
+Hybrid (petrol)
+If you believe this is a mistake, contact your MobilityCheck administrator.
+In maintenance
+In repair
+In use
+Inbox zero — no pending approvals
+Include decommissioned
+Instruction and licence status
+Instruction recorded.
+Insurance expires
+Insurance expiry
+Insurance policy
+Insurance policy number
+Internal name
+Inventory and status lifecycle
+Invoice number or scan ID.
+Issue date
+Issuing authority
+Keep active
+LPG
+Licence
+Licence expiry
+Licence marked as rejected.
+Licence number
+Licence overview
+Licence plate
+Licence scan uploaded.
+Licence status
+Licence verifications
+Licence verified.
+Licence, instruction, and compliance history for one driver.
+Live data
+Loading…
+Maintenance
+Maintenance attention
+Maintenance filters
+Maintenance is fully on schedule.
+Maintenance recorded as complete.
+Maintenance schedules
+Make
+Make / model
+Manage every car, van and truck in the fleet — model, status and requirements.
+Mandatory at handover. Odometer and zone checklist build the immutable trip log.
+Manual
+Mark complete
+Mark repaired
+Mark under assessment
+Max upload size (bytes)
+Minimum 15 minutes, maximum 90 days.
+Minutes after the booking end before the overdue alert fires.
+Missing
+MobilityCheck
+MobilityCheck access denied
+MobilityCheck navigation
+MobilityCheck notification
+MobilityCheck user
+Model
+Most recent first. Reports cannot be deleted — only amended.
+Name
+Negative amounts are not allowed.
+Net
+New booking
+Next due date
+Next due odometer (km)
+Next service
+Next service date
+Next service odometer (km)
+Nextcloud user ID
+No
+No amendments.
+No audit entries.
+No available vehicles right now.
+No bookings in this window.
+No bookings match your filters yet.
+No categories.
+No check-out yet
+No cost entries in this window.
+No cost entries match your filters.
+No damage on record. 
+No damage reports in this window.
+No damage reports on file.
+No driver profiles to track yet.
+No driver profiles yet.
+No drivers on record.
+No drivers yet
+No instruction records yet.
+No logs yet.
+No maintenance schedules defined yet.
+No notifications in this window.
+No open damage reports.
+No photos yet
+No photos.
+No records to display.
+No reservations in the next 90 days.
+No upcoming bookings yet
+No users match your search.
+No utilisation data.
+No vehicles found
+No verifications yet.
+Not yet
+Notes
+Notes for this verification (optional):
+Nothing to report right now — you are all set.
+Nothing to show yet
+Notifications log
+OK
+Odometer
+Odometer (km)
+Odometer interval
+Odometer interval (km)
+On schedule
+Onboarded drivers with their licence and instruction status. Add a Nextcloud user to register a new driver.
+Once the driver picks up the vehicle the checkout log appears here.
+One damage report with photos, status history, and linked repair.
+Only vehicles you are eligible to drive are listed.
+Open
+Open and in-progress repairs assigned to you.
+Open damage
+Open damage and repairs
+Open damage list
+Open — every Nextcloud user can open the app
+Operation failed: {code}
+Operational defaults
+Operations
+Optional reason / notes:
+Outstanding
+Overdue
+Overdue maintenance
+Overview
+Pending
+Pending approval
+Pending approvals
+Pending, approved and active bookings within the next 90 days.
+Per category
+Per vehicle
+Petrol
+Photo uploaded.
+Photos
+Plan recurring maintenance and inspections per vehicle.
+Plate
+Please enter a valid amount, for example 12,34.
+Please review the highlighted fields.
+Please select a valid VAT rate.
+Please select a vehicle.
+Policy saved.
+Profile and licence
+Profiles and licence checks
+Provide the exact login of an existing Nextcloud account. A driver profile is created if missing.
+Purpose
+Read-only compliance exports
+Read-only reports for management, audits and tax purposes.
+Read-only reports for management, audits and tax purposes. Filter by date range and vehicle.
+Ready to be booked
+Reason for decommissioning (visible in audit log):
+Reason for rejection (visible to the driver):
+Reason for rejection:
+Receipt
+Receipt reference
+Recipient
+Record
+Record cost
+Record cost entry
+Record fuel, repairs, insurance and other vehicle costs. VAT and net values are calculated automatically.
+Record now
+Recorded at
+Recorded by
+Recurring inspections and services. Mark a schedule as “blocking” to prevent new bookings until it is completed.
+Reference
+Reference / document number (optional):
+Refresh
+Refresh dashboard
+Reject
+Reject licence
+Rejected
+Repair scheduled
+Repaired
+Report
+Report and track incidents
+Report and track vehicle damage — from discovery to repair.
+Report damage
+Reported
+Reported by
+Reports
+Reports still being processed
+Request booking
+Required class
+Required licence class
+Reserve a vehicle for a specific time window. Conflicts and eligibility are checked automatically before submission.
+Reserve a vehicle for a specific time window. Conflicts are checked automatically before submission.
+Reserve and manage vehicle usage
+Restricted — only the groups listed below
+Review
+Road tax expiry
+Role
+Role assignment
+Roles
+Roles updated.
+Safety-critical → vehicle is automatically blocked until repaired.
+Save
+Save changes
+Save defaults
+Save policy
+Schedule
+Schedule created.
+Schedule repair
+Schedules and blocking checks
+Schedules that are due or overdue across the fleet.
+Search users
+Seating capacity
+Sent at
+Settings
+Severity
+Severity: {s} — Zone: {z}
+Show all
+Skip to main content
+Something went wrong.
+Start
+Start a fresh reservation
+Start a new booking from the action above.
+Start repair
+State
+Status
+Status of every driver licence on file.
+Status updated.
+Submit report
+The record you requested no longer exists.
+The request could not be completed. Please try again.
+The server could not be reached. Please check your connection and try again.
+This booking no longer exists.
+This damage report no longer exists.
+This driver profile no longer exists.
+This section loads server-side data with your current permissions.
+This vehicle no longer exists.
+Timezone
+To
+Today’s overview
+Total
+Total gross
+Transmission
+Trigger
+Type
+Under assessment
+Upcoming reserved windows
+Update licence details. Status changes require a manager.
+Upload licence scan (PDF or photo)
+Upload one or more photos to support the report.
+Uploaded at
+Uploaded by
+Use the navigation to return to a section that matches your role, or ask a MobilityCheck administrator to grant you the missing role.
+Use the “Add photo” button to attach evidence.
+Used for the 1% rule tax computation if enabled.
+User
+User ID
+User search
+Utilisation
+VAT
+VAT rate
+Vehicle
+Vehicle ID
+Vehicle cost threshold exceeded
+Vehicle created.
+Vehicle decommissioned. {n} booking(s) cancelled.
+Vehicle details loaded.
+Vehicle filters
+Vehicle is checked out and in use
+Vehicle is still safe to drive
+Vehicle utilisation
+Vehicles
+Vehicles needing service now
+Verified
+Verified at
+Verified by
+Verify licence
+Waiting for fleet manager approval
+What happened? Where exactly is the damage? Be specific so the workshop can plan the repair.
+When
+When records exist, they appear here.
+Whichever comes first
+Who can open MobilityCheck at all. Granular role assignment is below.
+Will be uppercased and validated.
+Window
+Workshop
+Workshop & driver
+Workshop queue
+Year
+Yearly driver instruction due
+Yearly instruction
+Yearly instruction for {y}
+Yearly instructions (UVV)
+Yes
+You are not allowed to use MobilityCheck right now.
+You are not eligible for this vehicle.
+You are not enrolled in MobilityCheck yet.
+You do not have permission to perform this action.
+You do not have the role required for this MobilityCheck area.
+You have a new MobilityCheck notification. Open MobilityCheck for details.
+Your booking is approved
+Your booking was cancelled
+Your booking was rejected
+Your fleet at a glance — what is happening today and what needs your attention.
+Your organisation restricts MobilityCheck access. You are not on the allowed-users list and you are not a member of any allowed group.
+Your session has expired. Please sign in again.
+Your upcoming bookings
+Zone
+e.g. B for cars, C1 / C for trucks, BE for trailer.
+mobilitycheck
+reduced
+required
+standard
+{n} d past expiry
+{n} d to expiry

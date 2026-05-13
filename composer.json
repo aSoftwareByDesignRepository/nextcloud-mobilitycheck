@@ -1,0 +1,34 @@
+{
+	"name": "software-by-design/nextcloud-mobilitycheck",
+	"description": "Corporate carsharing, fleet management, Fahrtenbuch and reimbursement for Nextcloud",
+	"type": "project",
+	"license": "AGPL-3.0-or-later",
+	"authors": [
+		{
+			"name": "Alexander Mäule",
+			"email": "info@software-by-design.de"
+		}
+	],
+	"require": {
+		"php": ">=8.2",
+		"dompdf/dompdf": "^3.0"
+	},
+	"require-dev": {
+		"nextcloud/ocp": "^32.0 || ^33.0",
+		"phpunit/phpunit": "^9.6",
+		"doctrine/dbal": "^3.0",
+		"symfony/http-foundation": "^6.4"
+	},
+	"autoload": {
+		"psr-4": {
+			"OCA\\MobilityCheck\\": "lib/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"OCA\\MobilityCheck\\Tests\\": "tests/",
+			"OCP\\": "vendor/nextcloud/ocp/OCP/",
+			"NCU\\": "vendor/nextcloud/ocp/NCU/"
+		}
+	}
+}

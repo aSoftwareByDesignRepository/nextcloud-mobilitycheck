@@ -1,0 +1,22 @@
+# Dependencies
+vendor/
+node_modules/
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Build / cache
+dist/
+build/
+.cache/
+
+# Logs
+*.log
+
+# PHP / JS tooling
+.phpunit.result.cache
+.phpunit.cache/
+.eslintcache

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+	<path d="M3.5 4.5 4.6 2.7C4.84 2.27 5.31 2 5.81 2h4.38c.5 0 .97.27 1.21.7L12.5 4.5h1.25c.55 0 1 .45 1 1V11c0 .55-.45 1-1 1H13v.75a.75.75 0 0 1-1.5 0V12h-7v.75a.75.75 0 0 1-1.5 0V12h-.75c-.55 0-1-.45-1-1V5.5c0-.55.45-1 1-1H3.5Zm1.5 0h6l-.62-1.05A.5.5 0 0 0 9.94 3H6.06a.5.5 0 0 0-.44.25L5 4.5Zm-1.25 4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm8.5 0a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM4 10h8v-.5H4v.5Z"/>
+</svg>

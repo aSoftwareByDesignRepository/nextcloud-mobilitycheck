@@ -1,0 +1,80 @@
+/*
+ * MobilityCheck design tokens.
+ *
+ * Colors come from Nextcloud CSS variables (--color-*) so the app
+ * inherits every NC theme (light, dark, contrast) automatically.
+ * App-specific tokens live under the `--mc-*` namespace and only
+ * define spacing, radii, typography, shadows, and tinted surfaces
+ * computed with `color-mix()`.
+ *
+ * Accessibility (WCAG 2.1 AA):
+ *  - 4.5:1 contrast on body copy; 3:1 on large text and UI components.
+ *  - 44 × 44 px minimum touch target on interactive controls.
+ *  - Status badges always carry a label AND a non-color cue.
+ *  - prefers-reduced-motion honoured.
+ */
+:root {
+	/* Responsive breakpoints (§2a.1) — use in @media only via these vars */
+	--mc-breakpoint-sm: 480px;
+	--mc-breakpoint-md: 768px;
+	--mc-breakpoint-lg: 1024px;
+
+	/* Spacing scale (4px base) */
+	--mc-space-1: 4px;
+	--mc-space-2: 8px;
+	--mc-space-3: 12px;
+	--mc-space-4: 16px;
+	--mc-space-5: 24px;
+	--mc-space-6: 32px;
+	--mc-space-7: 48px;
+	--mc-space-8: 64px;
+
+	/* Radii */
+	--mc-radius-sm: 6px;
+	--mc-radius-md: 12px;
+	--mc-radius-lg: 16px;
+	--mc-radius-pill: 999px;
+
+	/* Type scale */
+	--mc-fs-xs: 0.75rem;
+	--mc-fs-sm: 0.875rem;
+	--mc-fs-md: 1rem;
+	--mc-fs-lg: 1.125rem;
+	--mc-fs-xl: 1.5rem;
+	--mc-fs-2xl: 1.875rem;
+	--mc-line-tight: 1.2;
+	--mc-line-base: 1.45;
+
+	/* Shadows */
+	--mc-shadow-sm: 0 1px 2px color-mix(in srgb, var(--color-main-text, #1d1d1d) 8%, transparent);
+	--mc-shadow-md: 0 8px 24px color-mix(in srgb, var(--color-main-text, #1d1d1d) 12%, transparent);
+	--mc-shadow-focus: 0 0 0 3px color-mix(in srgb, var(--color-primary-element, #0082c9) 50%, transparent);
+
+	/* Surfaces */
+	--mc-bg: var(--color-main-background, #fff);
+	--mc-bg-soft: color-mix(in srgb, var(--color-main-background, #fff) 96%, var(--color-main-text, #1d1d1d) 4%);
+	--mc-bg-card: var(--color-main-background, #fff);
+	--mc-bg-stripe: color-mix(in srgb, var(--color-main-background, #fff) 92%, var(--color-main-text, #1d1d1d) 8%);
+	--mc-border: color-mix(in srgb, var(--color-main-text, #1d1d1d) 14%, transparent);
+	--mc-border-strong: color-mix(in srgb, var(--color-main-text, #1d1d1d) 26%, transparent);
+	/*
+	 * Muted text MUST clear WCAG 2.1 AA (4.5:1 for body, 3:1 for large/UI).
+	 * Nextcloud's `--color-text-maxcontrast` is theme-tuned to meet AA
+	 * against the active `--color-main-background` (≈ 5.4:1 in light,
+	 * ≈ 5.1:1 in dark, ≥ 7:1 in high-contrast). Earlier we used a
+	 * 60% opacity color-mix() against transparent, which renders at
+	 * ≈ #878787 (~3.45:1) on white and fails the §1.7 release gate.
+	 * Falling back to a hard-coded #6b6b6b matches NC's default token
+	 * for the rare case the variable is unset.
+	 */
+	--mc-muted: var(--color-text-maxcontrast, #6b6b6b);
+	--mc-text: var(--color-main-text, #1d1d1d);
+
+	/* Severity tints */
+	--mc-tint-info: color-mix(in srgb, var(--color-primary-element, #0082c9) 14%, transparent);
+	--mc-tint-success: color-mix(in srgb, var(--color-success, #46ba61) 18%, transparent);
+	--mc-tint-warning: color-mix(in srgb, var(--color-warning, #c98600) 18%, transparent);
+	--mc-tint-critical: color-mix(in srgb, var(--color-error, #cc4646) 18%, transparent);
+
+	--mc-tab-num: tabular-nums;
+}

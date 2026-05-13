@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<!--
+  - SPDX-FileCopyrightText: 2025-2026 Alexander Mäule <info@software-by-design.de>
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+<info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+	<id>mobilitycheck</id>
+	<name>MobilityCheck</name>
+	<name lang="de">MobilityCheck</name>
+	<summary>Corporate carsharing and fleet management for organisations</summary>
+	<summary lang="de">Firmen-Carsharing und Fuhrparkverwaltung für Organisationen</summary>
+	<description><![CDATA[
+# MobilityCheck
+
+A complete carsharing and fleet-management workspace for organisations that operate company cars in Germany. MobilityCheck keeps the vehicle catalog, the driver compliance trail (licence, yearly instruction), bookings with conflict prevention, damage and repair records, costs, maintenance schedules, and an auditable activity log in one Nextcloud workspace — no third-party SaaS, no data leaving your server.
+
+## Highlights
+
+- **Booking engine** with server-side conflict prevention, optional approval workflow, auto-reschedule proposals
+- **Driver compliance** — licence verification log, yearly instruction (Fahrunterweisung), expiry reminders
+- **Damage and repair** — immutable damage reports, photos in Files, workshop assignments, repair invoices
+- **Costs** — fuel, repair, insurance, tax, fines, parking; net/VAT/gross math in Euro cents only
+- **Maintenance** — calendar + odometer-driven schedules with optional blocking
+- **Access governance** — directory restriction, delegated app administrators, per-role permission matrix
+- **Accessibility** — interface targets WCAG 2.1 AA; responsive from 320px width
+- **Bilingual** — German (Sie-Form) and English shipped together; every string lives in `l10n`
+
+## Requirements
+
+- Nextcloud 32–33
+- PHP 8.2–8.4
+- MySQL/MariaDB, PostgreSQL, or SQLite
+	]]></description>
+	<description lang="de"><![CDATA[
+# MobilityCheck
+
+Ein vollständiger Carsharing- und Fuhrpark-Arbeitsbereich für Organisationen mit Firmenfahrzeugen in Deutschland. MobilityCheck führt Fahrzeugkatalog, Fahrer-Compliance (Führerschein, jährliche Fahrunterweisung), Buchungen mit Konfliktprüfung, Schäden und Reparaturen, Kosten, Wartung sowie ein nachvollziehbares Audit-Log zusammen — in einem einzigen Nextcloud-Arbeitsbereich, ohne externe SaaS und ohne dass Daten Ihren Server verlassen.
+
+## Funktionen
+
+- **Buchungs-Engine** mit serverseitiger Konfliktprüfung, optionalem Freigabeworkflow und automatischer Umplanung
+- **Fahrer-Compliance** — Führerscheinprüfung mit Audit-Log, jährliche Fahrunterweisung, Ablauferinnerungen
+- **Schäden & Reparaturen** — unveränderliche Schadensmeldungen, Fotos in Files, Werkstattzuweisung, Rechnungs-Upload
+- **Kosten** — Kraftstoff, Reparatur, Versicherung, KFZ-Steuer, Bußgelder, Parken; Netto/USt./Brutto streng in Euro-Cent
+- **Wartung** — kalender- und kilometerbasierte Pläne, optional buchungssperrend
+- **Zugriffsgovernance** — Verzeichnisbeschränkung, delegierte App-Administratoren, feingranulare Rollenmatrix
+- **Barrierefreiheit** — WCAG 2.1 AA als Ziel; responsives Layout ab 320 px
+- **Zweisprachig** — Deutsch (Sie-Form) und Englisch, jede Zeichenkette in `l10n`
+
+## Voraussetzungen
+
+- Nextcloud 32–33
+- PHP 8.2–8.4
+- MySQL/MariaDB, PostgreSQL oder SQLite
+	]]></description>
+	<version>0.4.3</version>
+	<licence>AGPL-3.0-or-later</licence>
+	<author mail="info@software-by-design.de" homepage="http://nextcloud.software-by-design.de">Alexander Mäule</author>
+	<namespace>MobilityCheck</namespace>
+	<category>organization</category>
+	<category>tools</category>
+	<website>http://nextcloud.software-by-design.de</website>
+	<bugs>https://github.com/aSoftwareByDesignRepository/nextcloud-mobilitycheck/issues</bugs>
+	<repository>https://github.com/aSoftwareByDesignRepository/nextcloud-mobilitycheck.git</repository>
+	<dependencies>
+		<nextcloud min-version="32" max-version="33"/>
+		<php min-version="8.2" max-version="8.4"/>
+		<database>mysql</database>
+		<database>pgsql</database>
+		<database>sqlite</database>
+	</dependencies>
+	<navigations>
+		<navigation>
+			<name>MobilityCheck</name>
+			<route>mobilitycheck.page.index</route>
+			<icon>app.svg</icon>
+			<order>15</order>
+		</navigation>
+	</navigations>
+	<keywords>
+		<keyword>fleet</keyword>
+		<keyword>carsharing</keyword>
+		<keyword>Fuhrpark</keyword>
+		<keyword>Firmenwagen</keyword>
+		<keyword>Fahrunterweisung</keyword>
+		<keyword>compliance</keyword>
+		<keyword>vehicle booking</keyword>
+		<keyword>accessibility</keyword>
+	</keywords>
+	<background-jobs>
+		<job>OCA\MobilityCheck\BackgroundJob\LicenceExpiryReminderJob</job>
+		<job>OCA\MobilityCheck\BackgroundJob\InstructionReminderJob</job>
+		<job>OCA\MobilityCheck\BackgroundJob\MaintenanceReminderJob</job>
+		<job>OCA\MobilityCheck\BackgroundJob\CostThresholdJob</job>
+		<job>OCA\MobilityCheck\BackgroundJob\BookingOverdueJob</job>
+		<job>OCA\MobilityCheck\BackgroundJob\BookingNoShowJob</job>
+		<job>OCA\MobilityCheck\BackgroundJob\BookingApprovalEscalationJob</job>
+		<job>OCA\MobilityCheck\BackgroundJob\FleetReassignmentJob</job>
+		<job>OCA\MobilityCheck\BackgroundJob\RateLimitPurgeJob</job>
+	</background-jobs>
+	<settings>
+		<admin>OCA\MobilityCheck\Settings\AdminSettings</admin>
+		<admin-section>OCA\MobilityCheck\Settings\AdminSection</admin-section>
+	</settings>
+</info>
