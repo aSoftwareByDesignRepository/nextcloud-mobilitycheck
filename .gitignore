@@ -20,3 +20,11 @@ build/
 .phpunit.result.cache
 .phpunit.cache/
 .eslintcache
+
+# Package / release artifacts
+*.tar.gz
+*.zip
+release/*.tar.gz.asc
+release/SIGNATURE-*.txt
+release/APPSTORE-SIGNATURE*.txt
+release/*.b64
