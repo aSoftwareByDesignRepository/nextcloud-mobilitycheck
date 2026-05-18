@@ -801,7 +801,7 @@
 		if (logs.checkin) rows.push({ event: t('Check-in'), ...logs.checkin });
 		if (rows.length === 0) {
 			host.appendChild(C.h('div', { class: 'mc-empty-state' }, [
-				C.h('div', { class: 'mc-empty-state__icon', 'aria-hidden': 'true' }, '?'),
+				C.h('div', { class: 'mc-empty-state__icon', 'aria-hidden': 'true' }, C.emptyStateIcon()),
 				C.h('div', { class: 'mc-empty-state__main' }, [
 					C.h('h3', null, t('No check-out yet')),
 					C.h('p', null, t('Once the driver picks up the vehicle the checkout log appears here.')),

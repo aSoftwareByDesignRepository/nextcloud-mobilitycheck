@@ -51,6 +51,27 @@
 
 	const text = (s) => document.createTextNode(s == null ? '' : String(s));
 
+	/** Empty-list glyph (matches IconCatalog::render('inbox')). */
+	function emptyStateIcon() {
+		const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+		svg.setAttribute('viewBox', '0 0 24 24');
+		svg.setAttribute('fill', 'none');
+		svg.setAttribute('stroke', 'currentColor');
+		svg.setAttribute('stroke-width', '1.75');
+		svg.setAttribute('stroke-linecap', 'round');
+		svg.setAttribute('stroke-linejoin', 'round');
+		svg.setAttribute('class', 'mc-icon');
+		svg.setAttribute('aria-hidden', 'true');
+		svg.setAttribute('focusable', 'false');
+		const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+		poly.setAttribute('points', '22 12 16 12 14 15 10 15 8 12 2 12');
+		const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+		path.setAttribute('d', 'M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11Z');
+		svg.appendChild(poly);
+		svg.appendChild(path);
+		return svg;
+	}
+
 	// ── Page bootstrap ───────────────────────────────────────────
 	function bootstrap() {
 		const root = document.getElementById('app-content');
@@ -156,7 +177,7 @@
 				hint ? h('p', null, hint) : null,
 			].filter(Boolean);
 			const parts = [
-				h('div', { class: 'mc-empty-state__icon', 'aria-hidden': 'true' }, '?'),
+				h('div', { class: 'mc-empty-state__icon', 'aria-hidden': 'true' }, emptyStateIcon()),
 				h('div', { class: 'mc-empty-state__main' }, mainBits),
 			];
 			if (options.emptyAction && options.emptyAction.label) {
@@ -748,6 +769,7 @@
 
 	window.MobilityCheckComponents = {
 		h, text,
+		emptyStateIcon,
 		bootstrap,
 		renderTable,
 		setLoading,

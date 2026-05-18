@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-	<path d="M3.5 4.5 4.6 2.7C4.84 2.27 5.31 2 5.81 2h4.38c.5 0 .97.27 1.21.7L12.5 4.5h1.25c.55 0 1 .45 1 1V11c0 .55-.45 1-1 1H13v.75a.75.75 0 0 1-1.5 0V12h-7v.75a.75.75 0 0 1-1.5 0V12h-.75c-.55 0-1-.45-1-1V5.5c0-.55.45-1 1-1H3.5Zm1.5 0h6l-.62-1.05A.5.5 0 0 0 9.94 3H6.06a.5.5 0 0 0-.44.25L5 4.5Zm-1.25 4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm8.5 0a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM4 10h8v-.5H4v.5Z"/>
+<!--
+  SPDX-FileCopyrightText: 2025-2026 Alexander Mäule
+  SPDX-License-Identifier: AGPL-3.0-or-later
+
+  Nextcloud global app menu: white glyph on 24×24 (same contract as other
+  first-party apps). Do not use currentColor here — the server menu applies
+  theme filters and expects a light icon asset.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+	<path fill="#ffffff" d="M5 11 6.5 6.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11v6a2 2 0 0 1-2 2h-1.25v1.25a1.25 1.25 0 1 1-2.5 0V19H8.75v1.25a1.25 1.25 0 1 1-2.5 0V19H5a2 2 0 0 1-2-2v-6Zm1.5 0h11l-1.1-2.2a.75.75 0 0 0-.67-.4H8.27a.75.75 0 0 0-.67.4L6.5 11ZM5 15h14v2H5v-2Zm2.25-4.25a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Zm9.5 0a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Z"/>
 </svg>

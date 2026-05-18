@@ -36,7 +36,7 @@ final class IconCatalogTest extends TestCase
 
 	public function testNavigationIconsAllExist(): void
 	{
-		$navIcons = ['layout-grid', 'car', 'users', 'calendar', 'plus', 'alert-triangle', 'tool', 'coins', 'shield-check', 'file-analytics', 'settings'];
+		$navIcons = ['layout-grid', 'car', 'users', 'calendar', 'plus', 'alert-triangle', 'tool', 'coins', 'shield-check', 'file-analytics', 'settings', 'inbox', 'route', 'clipboard-list', 'download', 'percent'];
 		foreach ($navIcons as $name) {
 			$this->assertNotEmpty(IconCatalog::render($name), 'icon "' . $name . '" must exist');
 		}

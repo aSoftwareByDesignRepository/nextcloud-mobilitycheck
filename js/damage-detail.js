@@ -173,7 +173,7 @@
 		host.innerHTML = '';
 		if (!photos.length) {
 			host.appendChild(C.h('div', { class: 'mc-empty-state' }, [
-				C.h('div', { class: 'mc-empty-state__icon', 'aria-hidden': 'true' }, '?'),
+				C.h('div', { class: 'mc-empty-state__icon', 'aria-hidden': 'true' }, C.emptyStateIcon()),
 				C.h('div', { class: 'mc-empty-state__main' }, [
 					C.h('h3', null, t('No photos yet')),
 					C.h('p', null, t('Use the “Add photo” button to attach evidence.')),

@@ -94,6 +94,7 @@ final class IconCatalog
 		'tool' => '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.7 2.7-2.6-.7-.7-2.6 2.7-2.7Z"/>',
 		'coins' => '<circle cx="8" cy="8" r="6"/><path d="M18 8.5a6 6 0 1 1-7 9.5"/><path d="M7 6h2v4"/><path d="M16 16h2v4"/>',
 		'file-analytics' => '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 17v-3"/><path d="M12 17v-5"/><path d="M15 17v-2"/>',
+		'inbox' => '<polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11Z"/>',
 	];
 
 	public static function render(string $name, ?string $extraClass = null): string

@@ -3,6 +3,9 @@
  * @var array $_
  * @var \OCP\IL10N $l
  */
+
+use OCA\MobilityCheck\Service\IconCatalog;
+
 $endpoint = (string)($_['apiEndpoint'] ?? '');
 $emptyHeading = (string)($_['emptyHeading'] ?? $l->t('Nothing to show yet'));
 $emptyCopy = (string)($_['emptyCopy'] ?? $l->t('When records exist, they appear here.'));
@@ -24,7 +27,7 @@ $emptyActionUrl = (string)($_['emptyActionUrl'] ?? '#');
 		<div class="mc-card-list" id="mc-data-card-list" aria-hidden="true"></div>
 	</div>
 	<div class="mc-empty-state" id="mc-empty-state" hidden>
-		<div class="mc-empty-state__icon" aria-hidden="true">?</div>
+		<div class="mc-empty-state__icon" aria-hidden="true"><?php print_unescaped(IconCatalog::render('inbox')); ?></div>
 		<div class="mc-empty-state__main">
 			<h3><?php p($emptyHeading); ?></h3>
 			<p><?php p($emptyCopy); ?></p>
