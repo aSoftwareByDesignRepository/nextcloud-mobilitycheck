@@ -12,7 +12,7 @@ use OCP\Migration\SimpleMigrationStep;
 
 /**
  * §A5.4 — Intelligent allocation: lease metadata on vehicles, booking
- * reassignment trace + manual flag, and `mc_booking_reassignment_suggestions`.
+ * reassignment trace + manual flag, and `mc_booking_reassign_sug`.
  */
 class Version1006Date20260613120000 extends SimpleMigrationStep
 {
@@ -50,8 +50,8 @@ class Version1006Date20260613120000 extends SimpleMigrationStep
 			}
 		}
 
-		if (!$schema->hasTable('mc_booking_reassignment_suggestions')) {
-			$t = $schema->createTable('mc_booking_reassignment_suggestions');
+		if (!$schema->hasTable('mc_booking_reassign_sug')) {
+			$t = $schema->createTable('mc_booking_reassign_sug');
 			$t->addColumn('id', Types::BIGINT, ['autoincrement' => true, 'notnull' => true]);
 			$t->addColumn('booking_id', Types::BIGINT, ['notnull' => true]);
 			$t->addColumn('from_vehicle_id', Types::BIGINT, ['notnull' => true]);

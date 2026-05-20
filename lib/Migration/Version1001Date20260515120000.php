@@ -175,9 +175,9 @@ class Version1001Date20260515120000 extends SimpleMigrationStep
 			$t->addIndex(['status'], 'mc_rc_stat_idx');
 		}
 
-		// A6 mc_reimbursement_rate_config
-		if (!$schema->hasTable('mc_reimbursement_rate_config')) {
-			$t = $schema->createTable('mc_reimbursement_rate_config');
+		// A6 mc_reim_rate_cfg (short name: `oc_` + logical must be ≤30 chars for Oracle-safe installs)
+		if (!$schema->hasTable('mc_reim_rate_cfg')) {
+			$t = $schema->createTable('mc_reim_rate_cfg');
 			$t->addColumn('id', Types::BIGINT, ['autoincrement' => true, 'notnull' => true]);
 			$t->addColumn('jurisdiction_code', Types::STRING, ['length' => 10, 'notnull' => true]);
 			$t->addColumn('vehicle_type', Types::STRING, ['length' => 16, 'notnull' => true]);
@@ -274,7 +274,7 @@ class Version1001Date20260515120000 extends SimpleMigrationStep
 	private function seedReimbursementRates(IDBConnection $connection): void
 	{
 		$c = $connection->getQueryBuilder();
-		$c->selectAlias($c->func()->count('*'), 'n')->from('mc_reimbursement_rate_config');
+		$c->selectAlias($c->func()->count('*'), 'n')->from('mc_reim_rate_cfg');
 		if ((int)($c->executeQuery()->fetchOne() ?: 0) > 0) {
 			return;
 		}
@@ -289,7 +289,7 @@ class Version1001Date20260515120000 extends SimpleMigrationStep
 		];
 		foreach ($rows as $r) {
 			$ins = $connection->getQueryBuilder();
-			$ins->insert('mc_reimbursement_rate_config')->values([
+			$ins->insert('mc_reim_rate_cfg')->values([
 				'jurisdiction_code' => $ins->createNamedParameter($r[0]),
 				'vehicle_type' => $ins->createNamedParameter($r[1]),
 				'rate_tier' => $ins->createNamedParameter($r[2], \OCP\DB\QueryBuilder\IQueryBuilder::PARAM_INT),

@@ -70,7 +70,7 @@ class GdprErasureService
 			['mc_audit_log', ['performed_by_user_id']],
 			['mc_booking_approvals', ['approver_user_id']],
 			['mc_bookings', ['driver_user_id', 'approved_by_user_id', 'created_by_user_id']],
-			['mc_booking_reassignment_suggestions', ['resolved_by_user_id']],
+			['mc_booking_reassign_sug', ['resolved_by_user_id']],
 			['mc_checkout_logs', ['recorded_by_user_id']],
 			['mc_cost_centres', ['owner_user_id']],
 			['mc_cost_entries', ['created_by_user_id', 'charge_driver_user_id']],

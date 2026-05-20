@@ -24,7 +24,7 @@ class ReimbursementRateService
 	public function listActive(?string $jurisdiction = null, ?string $vehicleType = null): array
 	{
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')->from('mc_reimbursement_rate_config')->orderBy('jurisdiction_code')->addOrderBy('vehicle_type')->addOrderBy('rate_tier');
+		$qb->select('*')->from('mc_reim_rate_cfg')->orderBy('jurisdiction_code')->addOrderBy('vehicle_type')->addOrderBy('rate_tier');
 		if ($jurisdiction !== null && $jurisdiction !== '') {
 			$qb->andWhere($qb->expr()->eq('jurisdiction_code', $qb->createNamedParameter($jurisdiction)));
 		}
@@ -62,7 +62,7 @@ class ReimbursementRateService
 			throw new ValidationException('TRIP_DATE_INVALID');
 		}
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')->from('mc_reimbursement_rate_config')
+		$qb->select('*')->from('mc_reim_rate_cfg')
 			->where($qb->expr()->eq('jurisdiction_code', $qb->createNamedParameter($jurisdiction)))
 			->andWhere($qb->expr()->eq('vehicle_type', $qb->createNamedParameter($vehicleType)))
 			->andWhere($qb->expr()->lte('valid_from', $qb->createNamedParameter($tripDate)))
@@ -141,7 +141,7 @@ class ReimbursementRateService
 		}
 		$now = gmdate('Y-m-d H:i:s');
 		$ins = $this->db->getQueryBuilder();
-		$ins->insert('mc_reimbursement_rate_config')->values([
+		$ins->insert('mc_reim_rate_cfg')->values([
 			'jurisdiction_code' => $ins->createNamedParameter($jc),
 			'vehicle_type' => $ins->createNamedParameter($vt),
 			'rate_tier' => $ins->createNamedParameter($tier, IQueryBuilder::PARAM_INT),
@@ -156,7 +156,7 @@ class ReimbursementRateService
 			'created_at' => $ins->createNamedParameter($now),
 		]);
 		$ins->executeStatement();
-		$id = (int)$this->db->lastInsertId('mc_reimbursement_rate_config');
+		$id = (int)$this->db->lastInsertId('mc_reim_rate_cfg');
 		$this->audit->log('reimbursement_rate', $id, 'create', $by, ['jc' => $jc, 'vehicle_type' => $vt]);
 		return ['id' => $id];
 	}

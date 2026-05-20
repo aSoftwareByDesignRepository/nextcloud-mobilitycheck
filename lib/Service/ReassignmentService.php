@@ -159,7 +159,7 @@ class ReassignmentService
 		}
 		$now = gmdate('Y-m-d H:i:s');
 		$ins = $this->db->getQueryBuilder();
-		$ins->insert('mc_booking_reassignment_suggestions')->values([
+		$ins->insert('mc_booking_reassign_sug')->values([
 			'booking_id' => $ins->createNamedParameter($bookingId, IQueryBuilder::PARAM_INT),
 			'from_vehicle_id' => $ins->createNamedParameter($fromVehicleId, IQueryBuilder::PARAM_INT),
 			'to_vehicle_id' => $ins->createNamedParameter($toId, IQueryBuilder::PARAM_INT),
@@ -191,7 +191,7 @@ class ReassignmentService
 	{
 		$qb = $this->db->getQueryBuilder();
 		$qb->selectAlias($qb->func()->count('*'), 'c')
-			->from('mc_booking_reassignment_suggestions')
+			->from('mc_booking_reassign_sug')
 			->where($qb->expr()->eq('booking_id', $qb->createNamedParameter($bookingId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('status', $qb->createNamedParameter('open')));
 		return (int)$qb->executeQuery()->fetchOne();
@@ -201,7 +201,7 @@ class ReassignmentService
 	{
 		$qb = $this->db->getQueryBuilder();
 		$qb->selectAlias($qb->func()->count('*'), 'c')
-			->from('mc_booking_reassignment_suggestions')
+			->from('mc_booking_reassign_sug')
 			->where($qb->expr()->eq('booking_id', $qb->createNamedParameter($bookingId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('status', $qb->createNamedParameter('open')))
 			->andWhere($qb->expr()->eq('to_vehicle_id', $qb->createNamedParameter($toVehicleId, IQueryBuilder::PARAM_INT)));
@@ -256,7 +256,7 @@ class ReassignmentService
 		$this->requireFleetManagerClass($viewerId);
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('s.*', 'b.start_datetime', 'b.end_datetime', 'b.driver_user_id', 'b.status AS booking_status')
-			->from('mc_booking_reassignment_suggestions', 's')
+			->from('mc_booking_reassign_sug', 's')
 			->innerJoin('s', 'mc_bookings', 'b', $qb->expr()->eq('b.id', 's.booking_id'))
 			->where($qb->expr()->eq('s.status', $qb->createNamedParameter('open')))
 			->orderBy('s.created_at', 'DESC');
@@ -343,7 +343,7 @@ class ReassignmentService
 	private function getSuggestionRow(int $id): array
 	{
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')->from('mc_booking_reassignment_suggestions')
+		$qb->select('*')->from('mc_booking_reassign_sug')
 			->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$row = $qb->executeQuery()->fetch();
 		if (!$row) {
@@ -356,7 +356,7 @@ class ReassignmentService
 	{
 		$now = gmdate('Y-m-d H:i:s');
 		$qb = $this->db->getQueryBuilder();
-		$qb->update('mc_booking_reassignment_suggestions')
+		$qb->update('mc_booking_reassign_sug')
 			->set('status', $qb->createNamedParameter($status))
 			->set('resolved_at', $qb->createNamedParameter($now))
 			->set('resolved_by_user_id', $qb->createNamedParameter($actorUserId))
@@ -367,7 +367,7 @@ class ReassignmentService
 	private function supersedeOtherOpenSuggestions(int $bookingId, int $keepId, string $actorUserId): void
 	{
 		$qb = $this->db->getQueryBuilder();
-		$qb->update('mc_booking_reassignment_suggestions')
+		$qb->update('mc_booking_reassign_sug')
 			->set('status', $qb->createNamedParameter('superseded'))
 			->set('resolved_at', $qb->createNamedParameter(gmdate('Y-m-d H:i:s')))
 			->set('resolved_by_user_id', $qb->createNamedParameter($actorUserId))
