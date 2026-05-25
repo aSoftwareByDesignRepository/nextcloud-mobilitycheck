@@ -78,6 +78,8 @@ class ApiController extends Controller
 					],
 					'settings' => [
 						'currency' => $this->settings->currency(),
+						'currencyDecimals' => $this->settings->currencyDecimals(),
+						'defaultTimezone' => $this->settings->defaultTimezone(),
 						'defaultVatBp' => $this->settings->defaultVatBp(),
 						'checkinGraceMinutes' => $this->settings->checkinGraceMinutes(),
 						'overdueReturnGraceMinutes' => $this->settings->overdueReturnGraceMinutes(),

@@ -53,6 +53,15 @@ final class ApiJsonErrorResponseTest extends TestCase
 		$this->assertSame('2026-05-11 11:00:00', $ctx['end']);
 	}
 
+	public function testInvalidArgumentMapsTo422WithCode(): void
+	{
+		$res = ApiJsonErrorResponse::fromThrowable(new \InvalidArgumentException('INVALID_TIMEZONE'));
+		$this->assertSame(Http::STATUS_UNPROCESSABLE_ENTITY, $res->getStatus());
+		$body = $res->getData();
+		$this->assertSame('INVALID_TIMEZONE', $body['error']['code']);
+		$this->assertSame('validation', $body['error']['type']);
+	}
+
 	public function testGenericThrowableDoesNotLeakMessage(): void
 	{
 		$res = ApiJsonErrorResponse::fromThrowable(new \RuntimeException('Connection refused on /etc/passwd'));

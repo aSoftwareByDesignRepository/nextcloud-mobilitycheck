@@ -29,7 +29,10 @@
 
 	let loadedPolicy = { appAdminUserIds: [], allowedUserIds: [], allowedGroupIds: [], accessRestrictionEnabled: false };
 	const UP = window.MobilityCheckUserPicker;
+	const CP = window.MobilityCheckCatalogPickers;
 	let policyPickers = [];
+	let currencyPicker = null;
+	let timezonePicker = null;
 	let lmDriverPicker;
 	let lmManagerPicker;
 	let auditUserPicker;
@@ -167,14 +170,35 @@
 		} catch (e) { M.reportError(e); }
 	}
 
+	async function initCatalogPickers(currencyCode, timezoneCode) {
+		if (!CP) {
+			return;
+		}
+		try {
+			const [tzCatalog, curCatalog] = await Promise.all([
+				CP.loadTimezoneCatalog(),
+				CP.loadCurrencyCatalog(),
+			]);
+			const curRoot = document.querySelector('[data-mc-currency-picker]');
+			const tzRoot = document.querySelector('[data-mc-timezone-picker]');
+			if (curRoot) {
+				currencyPicker = CP.attachCurrency(curRoot, curCatalog, { defaultCurrency: currencyCode || 'EUR' });
+			}
+			if (tzRoot) {
+				timezonePicker = CP.attachTimezone(tzRoot, tzCatalog, { defaultTimezone: timezoneCode || 'Europe/Berlin' });
+			}
+		} catch (e) {
+			M.reportError(e);
+		}
+	}
+
 	async function loadOps() {
 		try {
 			const s = await API.get('/api/admin/settings');
 			const form = document.getElementById('mc-set-ops');
 			if (form && form.elements) {
-				form.elements.currency.value = s.currency || 'EUR';
+				await initCatalogPickers(s.currency || 'EUR', s.defaultTimezone || 'Europe/Berlin');
 				form.elements.defaultVatBp.value = String(s.defaultVatBp || 1900);
-				form.elements.defaultTimezone.value = s.defaultTimezone || '';
 				const mode = s.approvalMode || (s.approvalWorkflow ? 'fleet_manager' : 'none');
 				if (form.elements.approvalMode) form.elements.approvalMode.value = mode;
 				if (form.elements.approvalFallbackNoLm) {
@@ -247,10 +271,20 @@
 			return;
 		}
 		const form = ev.target;
+		const currency = currencyPicker ? currencyPicker.getValue() : (form.elements.currency && form.elements.currency.value) || 'EUR';
+		const defaultTimezone = timezonePicker ? timezonePicker.getValue() : (form.elements.defaultTimezone && form.elements.defaultTimezone.value) || '';
+		if (!currency) {
+			M.alert(t('Please choose a currency.'));
+			return;
+		}
+		if (!defaultTimezone) {
+			M.alert(t('Please choose a timezone.'));
+			return;
+		}
 		const payload = {
-			currency: (form.elements.currency.value || 'EUR').toUpperCase(),
+			currency,
 			defaultVatBp: parseInt(form.elements.defaultVatBp.value, 10),
-			defaultTimezone: form.elements.defaultTimezone.value,
+			defaultTimezone,
 			approvalMode: form.elements.approvalMode ? form.elements.approvalMode.value : 'none',
 			approvalFallbackNoLm: !!(form.elements.approvalFallbackNoLm && form.elements.approvalFallbackNoLm.checked),
 			approvalWorkflow: form.elements.approvalMode ? (form.elements.approvalMode.value !== 'none') : false,
@@ -259,7 +293,13 @@
 			bookingEmailAttachIcs: !!(form.elements.bookingEmailAttachIcs && form.elements.bookingEmailAttachIcs.checked),
 		};
 		try {
-			await API.post('/api/admin/settings', payload);
+			const saved = await API.post('/api/admin/settings', payload);
+			const shell = document.getElementById('app-content');
+			if (shell) {
+				shell.setAttribute('data-mc-currency', saved.currency || currency);
+				const decimals = saved.currencyDecimals != null ? saved.currencyDecimals : 2;
+				shell.setAttribute('data-mc-currency-decimals', String(decimals));
+			}
 			M.toast(t('Operational defaults saved.'), 'success');
 		} catch (e) { M.reportError(e); }
 	}

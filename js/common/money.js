@@ -15,15 +15,28 @@
 		return (r && r.getAttribute('data-mc-currency')) || 'EUR';
 	}
 
-	function fromMinor(v) {
-		const n = Number(v);
-		if (!Number.isFinite(n)) return '';
-		return (n / 100).toFixed(2);
+	function currencyDecimals() {
+		const r = root();
+		const raw = r && r.getAttribute('data-mc-currency-decimals');
+		const n = parseInt(raw, 10);
+		return Number.isFinite(n) && n >= 0 && n <= 4 ? n : 2;
 	}
 
-	function format(minor, currencyOverride) {
+	function minorDivisor(decimals) {
+		return Math.pow(10, decimals);
+	}
+
+	function fromMinor(v, decimalsOverride) {
+		const n = Number(v);
+		if (!Number.isFinite(n)) return '';
+		const digits = decimalsOverride != null ? decimalsOverride : currencyDecimals();
+		return (n / minorDivisor(digits)).toFixed(digits);
+	}
+
+	function format(minor, currencyOverride, decimalsOverride) {
 		const cur = currencyOverride || currency();
-		const n = Number(minor || 0) / 100;
+		const digits = decimalsOverride != null ? decimalsOverride : currencyDecimals();
+		const n = Number(minor || 0) / minorDivisor(digits);
 		try {
 			return new Intl.NumberFormat(locale(), { style: 'currency', currency: cur, currencyDisplay: 'symbol' }).format(n);
 		} catch (_) {
@@ -31,7 +44,7 @@
 		}
 	}
 
-	function parseToMinor(value) {
+	function parseToMinor(value, decimalsOverride) {
 		if (value === null || value === undefined || value === '') return null;
 		let s = String(value).trim();
 		if (!s) return null;
@@ -44,7 +57,8 @@
 			s = s.replace(/,/g, '');
 		}
 		if (!/^-?\d+(\.\d{1,4})?$/.test(s)) return NaN;
-		const n = Math.round(parseFloat(s) * 100);
+		const digits = decimalsOverride != null ? decimalsOverride : currencyDecimals();
+		const n = Math.round(parseFloat(s) * minorDivisor(digits));
 		return Number.isFinite(n) ? n : NaN;
 	}
 
@@ -53,5 +67,6 @@
 		format,
 		parseToMinor,
 		currency,
+		currencyDecimals,
 	};
 })();

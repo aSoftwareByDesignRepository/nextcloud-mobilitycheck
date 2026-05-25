@@ -21,6 +21,8 @@ class LocaleFormatService
 		private IDateTimeFormatter $dateTimeFormatter,
 		private IUserSession $userSession,
 		private IDateTimeZone $dateTimeZone,
+		private SettingsService $settings,
+		private TimezoneCatalog $timezones,
 	) {
 	}
 
@@ -56,8 +58,13 @@ class LocaleFormatService
 			$locale = (string)$this->l10nFactory->findLanguage(Application::APP_ID);
 		}
 		$htmlLang = $this->canonicalHtmlLangFromLocaleString($locale);
-		$tz = $this->dateTimeZone->getTimeZone();
-		$tzName = $tz instanceof \DateTimeZone ? $tz->getName() : 'UTC';
+		$appTz = $this->settings->defaultTimezone();
+		if ($this->timezones->isValid($appTz)) {
+			$tzName = $appTz;
+		} else {
+			$tz = $this->dateTimeZone->getTimeZone();
+			$tzName = $tz instanceof \DateTimeZone ? $tz->getName() : 'UTC';
+		}
 		return [
 			'locale' => $htmlLang,
 			'htmlLang' => $htmlLang,

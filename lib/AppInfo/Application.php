@@ -32,6 +32,7 @@ use OCA\MobilityCheck\Service\ReportService;
 use OCA\MobilityCheck\Service\SettingsService;
 use OCA\MobilityCheck\Service\StationService;
 use OCA\MobilityCheck\Service\TaxBenefitService;
+use OCA\MobilityCheck\Service\CurrencyCatalog;
 use OCA\MobilityCheck\Service\TimezoneCatalog;
 use OCA\MobilityCheck\Service\VehicleService;
 use OCA\MobilityCheck\Service\ExportService;
@@ -96,9 +97,12 @@ class Application extends App implements IBootstrap
 				$c->get(\OCP\IDateTimeFormatter::class),
 				$c->get(\OCP\IUserSession::class),
 				$c->get(\OCP\IDateTimeZone::class),
+				$c->get(SettingsService::class),
+				$c->get(TimezoneCatalog::class),
 			);
 		});
 		$context->registerService(TimezoneCatalog::class, fn () => new TimezoneCatalog());
+		$context->registerService(CurrencyCatalog::class, fn () => new CurrencyCatalog());
 		$context->registerService(IconCatalog::class, fn () => new IconCatalog());
 		$context->registerService(AuditLogService::class, function ($c): AuditLogService {
 			return new AuditLogService(
@@ -107,7 +111,11 @@ class Application extends App implements IBootstrap
 			);
 		});
 		$context->registerService(SettingsService::class, function ($c): SettingsService {
-			return new SettingsService($c->get(\OCP\IConfig::class));
+			return new SettingsService(
+				$c->get(\OCP\IConfig::class),
+				$c->get(TimezoneCatalog::class),
+				$c->get(CurrencyCatalog::class),
+			);
 		});
 		$context->registerService(FileService::class, function ($c): FileService {
 			return new FileService(
@@ -284,6 +292,7 @@ class Application extends App implements IBootstrap
 				$c->get(\OCP\IDBConnection::class),
 				$c->get(AccessControlService::class),
 				$c->get(AuditLogService::class),
+				$c->get(TimezoneCatalog::class),
 			);
 		});
 		$context->registerService(RelocationService::class, function ($c): RelocationService {

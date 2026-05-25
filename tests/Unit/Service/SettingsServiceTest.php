@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace OCA\MobilityCheck\Tests\Unit\Service;
 
 use OCA\MobilityCheck\AppInfo\Application;
+use OCA\MobilityCheck\Service\CurrencyCatalog;
 use OCA\MobilityCheck\Service\SettingsService;
+use OCA\MobilityCheck\Service\TimezoneCatalog;
 use OCP\IConfig;
 use PHPUnit\Framework\TestCase;
 
@@ -161,12 +163,54 @@ final class SettingsServiceTest extends TestCase
 		$this->assertFalse($s->bookingEmailAttachIcs());
 	}
 
+	public function testCurrencyDecimalsFollowsCatalog(): void
+	{
+		$s = $this->service([SettingsService::KEY_CURRENCY => 'JPY']);
+		$this->assertSame(0, $s->currencyDecimals());
+		$s2 = $this->service([SettingsService::KEY_CURRENCY => 'RUB']);
+		$this->assertSame(2, $s2->currencyDecimals());
+	}
+
+	public function testSaveRejectsUnsupportedCurrency(): void
+	{
+		$s = $this->service();
+		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('CURRENCY_NOT_SUPPORTED');
+		$s->save(['currency' => 'XXX']);
+	}
+
+	public function testSaveRejectsInvalidTimezone(): void
+	{
+		$s = $this->service();
+		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('INVALID_TIMEZONE');
+		$s->save(['defaultTimezone' => 'Not/A/Zone']);
+	}
+
+	public function testSaveNormalizesCurrencyAndTimezone(): void
+	{
+		$cfg = $this->createMock(IConfig::class);
+		$stored = [];
+		$cfg->method('getAppValue')->willReturnCallback(
+			static fn (string $app, string $key, string $default) => $stored[$key] ?? $default
+		);
+		$cfg->method('setAppValue')->willReturnCallback(
+			static function (string $app, string $key, string $value) use (&$stored): void {
+				$stored[$key] = $value;
+			}
+		);
+		$s = new SettingsService($cfg, new TimezoneCatalog(), new CurrencyCatalog());
+		$s->save(['currency' => 'rub', 'defaultTimezone' => '  Asia/Tashkent  ']);
+		$this->assertSame('RUB', $stored[SettingsService::KEY_CURRENCY] ?? null);
+		$this->assertSame('Asia/Tashkent', $stored[SettingsService::KEY_DEFAULT_TIMEZONE] ?? null);
+	}
+
 	public function testAllReturnsKnownKeys(): void
 	{
 		$s = $this->service();
 		$out = $s->all();
 		foreach ([
-			'currency', 'defaultVatBp', 'approvalMode',
+			'currency', 'currencyDecimals', 'defaultTimezone', 'defaultVatBp', 'approvalMode',
 			'approvalLineManagerTimeoutHours', 'approvalFleetTimeoutHours',
 			'lineManagerSelfApprovalAllowed', 'bookingNoShowGraceMinutes',
 			'bookingExtensionMaxMinutes', 'overdueReturnGraceMinutes',

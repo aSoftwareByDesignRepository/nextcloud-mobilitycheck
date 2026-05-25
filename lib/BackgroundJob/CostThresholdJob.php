@@ -8,6 +8,7 @@ use OCA\MobilityCheck\AppInfo\Application;
 use OCA\MobilityCheck\Service\AccessControlService;
 use OCA\MobilityCheck\Service\MobilityCheckMoney;
 use OCA\MobilityCheck\Service\NotificationService;
+use OCA\MobilityCheck\Service\SettingsService;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -87,8 +88,14 @@ final class CostThresholdJob extends TimedJob
 				[
 					'vehicleId' => $vehicleId,
 					'vehicleName' => $vehicleName,
-					'amount' => MobilityCheckMoney::minorToDecimalString($totalMinor) . ' EUR',
-					'thresholdAmount' => MobilityCheckMoney::minorToDecimalString($thresholdMinor) . ' EUR',
+					'amount' => MobilityCheckMoney::formatMinorLabel(
+						$totalMinor,
+						strtoupper(trim($this->config->getAppValue(Application::APP_ID, SettingsService::KEY_CURRENCY, 'EUR')))
+					),
+					'thresholdAmount' => MobilityCheckMoney::formatMinorLabel(
+						$thresholdMinor,
+						strtoupper(trim($this->config->getAppValue(Application::APP_ID, SettingsService::KEY_CURRENCY, 'EUR')))
+					),
 					'period' => $periodKey,
 				],
 			);

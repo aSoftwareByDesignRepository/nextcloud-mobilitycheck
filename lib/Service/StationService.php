@@ -16,6 +16,7 @@ class StationService
 		private IDBConnection $db,
 		private AccessControlService $access,
 		private AuditLogService $audit,
+		private TimezoneCatalog $timezones,
 	) {
 	}
 
@@ -58,8 +59,9 @@ class StationService
 		if ($name === '' || mb_strlen($name) > 120) {
 			throw new ValidationException('STATION_NAME_REQUIRED', 'name');
 		}
-		$tz = trim((string)($payload['timezone'] ?? 'Europe/Berlin'));
-		if (!in_array($tz, \DateTimeZone::listIdentifiers(), true)) {
+		try {
+			$tz = $this->timezones->normalizeOrThrow((string)($payload['timezone'] ?? 'Europe/Berlin'));
+		} catch (\InvalidArgumentException) {
 			throw new ValidationException('TIMEZONE_INVALID', 'timezone');
 		}
 		$now = gmdate('Y-m-d H:i:s');
@@ -110,12 +112,19 @@ class StationService
 		}
 		foreach ([
 			['address_line_1', $payload['addressLine1'] ?? $payload['address_line_1'] ?? null, 120],
-			['timezone', $payload['timezone'] ?? null, 64],
 		] as [$col, $val, $len]) {
 			if ($val !== null) {
 				$s = $this->str($val, $len);
 				$upd->set($col, $upd->createNamedParameter($s));
 			}
+		}
+		if (array_key_exists('timezone', $payload)) {
+			try {
+				$tz = $this->timezones->normalizeOrThrow((string)$payload['timezone']);
+			} catch (\InvalidArgumentException) {
+				throw new ValidationException('TIMEZONE_INVALID', 'timezone');
+			}
+			$upd->set('timezone', $upd->createNamedParameter($tz));
 		}
 		$upd->where($upd->expr()->eq('id', $upd->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$upd->executeStatement();

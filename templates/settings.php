@@ -94,10 +94,17 @@ $isAppAdmin = !empty($_['isAppAdmin']);
 	</header>
 	<form id="mc-set-ops" class="mc-form" novalidate <?php if (!$isAppAdmin): ?>aria-disabled="true"<?php endif; ?>>
 		<div class="mc-grid-2">
-			<div class="mc-form-row">
-				<label for="mc-set-curr"><?php p($l->t('Currency (ISO 4217)')); ?></label>
-				<input id="mc-set-curr" name="currency" type="text" maxlength="3" placeholder="<?php p($l->t('e.g. EUR')); ?>" autocomplete="off" <?php if (!$isAppAdmin): ?>disabled<?php endif; ?>>
-				<p class="mc-form-row__hint"><?php p($l->t('Three-letter ISO 4217 code. Money is stored in minor units (cents).')); ?></p>
+			<div class="mc-form-row mc-form-row--catalog">
+				<span id="mc-set-curr-label" class="mc-form-row__label"><?php p($l->t('Currency (ISO 4217)')); ?></span>
+				<?php
+				$pickerId = 'mc-set-curr';
+				$pickerName = 'currency';
+				$pickerDefault = (string)($_['currency'] ?? 'EUR');
+				$pickerDisabled = !$isAppAdmin;
+				$pickerDescribedBy = 'mc-set-curr-hint';
+				include __DIR__ . '/common/mc-currency-picker.php';
+				?>
+				<p class="mc-form-row__hint" id="mc-set-curr-hint"><?php p($l->t('Supported ISO 4217 codes only. Money is stored in minor units (e.g. cents for EUR).')); ?></p>
 			</div>
 			<div class="mc-form-row">
 				<label for="mc-set-vat"><?php p($l->t('Default VAT rate')); ?></label>
@@ -108,10 +115,17 @@ $isAppAdmin = !empty($_['isAppAdmin']);
 				</select>
 				<p class="mc-form-row__hint"><?php p($l->t('Pre-fills the VAT picker when recording new costs. Each entry can still be overridden.')); ?></p>
 			</div>
-			<div class="mc-form-row">
-				<label for="mc-set-tz"><?php p($l->t('Default timezone')); ?></label>
-				<input id="mc-set-tz" name="defaultTimezone" type="text" placeholder="<?php p($l->t('e.g. Europe/Berlin')); ?>" autocomplete="off" <?php if (!$isAppAdmin): ?>disabled<?php endif; ?>>
-				<p class="mc-form-row__hint"><?php p($l->t('IANA timezone identifier. Datetimes are stored in UTC and rendered in this zone by default.')); ?></p>
+			<div class="mc-form-row mc-form-row--catalog">
+				<span id="mc-set-tz-label" class="mc-form-row__label"><?php p($l->t('Default timezone')); ?></span>
+				<?php
+				$pickerId = 'mc-set-tz';
+				$pickerName = 'defaultTimezone';
+				$pickerDefault = (string)($_['defaultTimezone'] ?? 'Europe/Berlin');
+				$pickerDisabled = !$isAppAdmin;
+				$pickerDescribedBy = 'mc-set-tz-hint';
+				include __DIR__ . '/common/mc-timezone-picker.php';
+				?>
+				<p class="mc-form-row__hint" id="mc-set-tz-hint"><?php p($l->t('Search the full IANA list. Datetimes are stored in UTC and shown in this zone by default across the app.')); ?></p>
 			</div>
 			<div class="mc-form-row">
 				<label for="mc-set-approval-mode"><?php p($l->t('Booking approval workflow')); ?></label>

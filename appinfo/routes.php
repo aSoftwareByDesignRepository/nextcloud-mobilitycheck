@@ -66,6 +66,10 @@ return [
 		['name' => 'damage#uploadHandoverPhoto', 'url' => '/api/bookings/{id}/handover-photos', 'verb' => 'POST', 'requirements' => ['id' => '\d+']],
 		['name' => 'damage#handoverPhotos', 'url' => '/api/bookings/{id}/handover-photos', 'verb' => 'GET', 'requirements' => ['id' => '\d+']],
 
+		// ── Catalog (timezone / currency pickers) ─────────────────────────
+		['name' => 'catalogApi#timezones', 'url' => '/api/catalog/timezones', 'verb' => 'GET'],
+		['name' => 'catalogApi#currencies', 'url' => '/api/catalog/currencies', 'verb' => 'GET'],
+
 		// ── Bootstrap + dashboard (current user, urls, role) ────────────────
 		['name' => 'api#bootstrap', 'url' => '/api/bootstrap', 'verb' => 'GET'],
 		['name' => 'api#dashboard', 'url' => '/api/dashboard', 'verb' => 'GET'],

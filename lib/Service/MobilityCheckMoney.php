@@ -25,25 +25,31 @@ final class MobilityCheckMoney
 
 	/**
 	 * Parse a human decimal (e.g. "12,34" or "12.34" or "12") into
-	 * Euro cents. Rejects negative values and obvious garbage.
+	 * minor units for the given ISO currency (default 2 decimals).
+	 * Rejects negative values and obvious garbage.
 	 *
 	 * @throws ValidationException when the value cannot be parsed.
 	 */
-	public static function decimalToMinor(string|int|float $value): int
+	public static function decimalToMinor(string|int|float $value, ?string $currencyCode = null): int
 	{
+		$digits = 2;
+		if ($currencyCode !== null && trim($currencyCode) !== '') {
+			$digits = (new CurrencyCatalog())->decimalsFor($currencyCode);
+		}
+		$factor = (int) (10 ** $digits);
 		if (is_int($value)) {
-			$cents = $value * 100;
-			if ($cents < 0) {
+			$minor = $value * $factor;
+			if ($minor < 0) {
 				throw new ValidationException('MONEY_NEGATIVE_NOT_ALLOWED');
 			}
-			return $cents;
+			return $minor;
 		}
 		if (is_float($value)) {
-			$cents = (int) round($value * 100);
-			if ($cents < 0) {
+			$minor = (int) round($value * $factor);
+			if ($minor < 0) {
 				throw new ValidationException('MONEY_NEGATIVE_NOT_ALLOWED');
 			}
-			return $cents;
+			return $minor;
 		}
 		$raw = trim($value);
 		if ($raw === '') {
@@ -70,7 +76,15 @@ final class MobilityCheckMoney
 			throw new ValidationException('MONEY_NEGATIVE_NOT_ALLOWED');
 		}
 		// Kaufmännische Rundung — half-up.
-		return self::roundHalfUp($float * 100);
+		return self::roundHalfUp($float * $factor);
+	}
+
+	public static function formatMinorLabel(int $minor, string $currencyCode): string
+	{
+		$catalog = new CurrencyCatalog();
+		$code = $catalog->isSupported($currencyCode) ? strtoupper(trim($currencyCode)) : 'EUR';
+		$digits = $catalog->decimalsFor($code);
+		return self::minorToDecimalString($minor, $digits) . ' ' . $code;
 	}
 
 	public static function minorToDecimalString(int $minor, int $fractionDigits = 2): string

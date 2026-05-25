@@ -53,7 +53,7 @@ Ein vollständiger Carsharing- und Fuhrpark-Arbeitsbereich für Organisationen m
 - PHP 8.2–8.4
 - MySQL/MariaDB, PostgreSQL oder SQLite
 	]]></description>
-	<version>0.4.3</version>
+	<version>0.4.4</version>
 	<licence>AGPL-3.0-or-later</licence>
 	<author mail="info@software-by-design.de" homepage="http://nextcloud.software-by-design.de">Alexander Mäule</author>
 	<namespace>MobilityCheck</namespace>

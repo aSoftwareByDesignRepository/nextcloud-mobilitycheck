@@ -14,7 +14,6 @@ use OCA\MobilityCheck\Service\GlossaryService;
 use OCA\MobilityCheck\Service\LocaleFormatService;
 use OCA\MobilityCheck\Service\LineManagerService;
 use OCA\MobilityCheck\Service\SettingsService;
-use OCA\MobilityCheck\Service\TimezoneCatalog;
 use OCA\MobilityCheck\Service\VehicleService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -45,7 +44,6 @@ class PageController extends Controller
 		IRequest $request,
 		private AccessControlService $access,
 		private LocaleFormatService $localeFormat,
-		private TimezoneCatalog $timezoneCatalog,
 		private GlossaryService $glossary,
 		private SettingsService $settings,
 		private IURLGenerator $urlGenerator,
@@ -359,7 +357,9 @@ class PageController extends Controller
 		return $this->page(
 			'settings',
 			'settings',
-			$this->l10n->t('App configuration: access policy, defaults, role assignment and audit log.')
+			$this->l10n->t('App configuration: access policy, defaults, role assignment and audit log.'),
+			[],
+			true
 		);
 	}
 
@@ -481,7 +481,7 @@ class PageController extends Controller
 	 *
 	 * @param array<string,mixed> $extra Additional template variables.
 	 */
-	private function page(string $template, string $script, string $help, array $extra = []): TemplateResponse
+	private function page(string $template, string $script, string $help, array $extra = [], bool $withCatalogPickers = false): TemplateResponse
 	{
 		$userId = $this->access->currentUserId();
 
@@ -494,6 +494,9 @@ class PageController extends Controller
 		Util::addScript(Application::APP_ID, 'common/components');
 		Util::addScript(Application::APP_ID, 'common/glossary');
 		Util::addScript(Application::APP_ID, 'common/user-picker');
+		if ($withCatalogPickers) {
+			Util::addScript(Application::APP_ID, 'common/catalog-pickers');
+		}
 		Util::addScript(Application::APP_ID, $script);
 
 		$roles = $this->access->getRoles($userId);
@@ -524,9 +527,10 @@ class PageController extends Controller
 			'isWorkshop' => $isWorkshop,
 			'isWorkshopOnly' => $isWorkshopOnly,
 			'clientHints' => $this->localeFormat->clientHints(),
-			'timezones' => $this->timezoneCatalog->all(),
 			'glossary' => $this->glossary->all(),
 			'currency' => $this->settings->currency(),
+			'currencyDecimals' => $this->settings->currencyDecimals(),
+			'defaultTimezone' => $this->settings->defaultTimezone(),
 			'urls' => $this->buildUrls(),
 		];
 		foreach ($extra as $k => $v) {

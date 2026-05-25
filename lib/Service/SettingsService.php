@@ -68,13 +68,26 @@ class SettingsService
 	public const KEY_MIN_REMAINING_LEASE_DAYS_FOR_BOOKING = 'min_remaining_lease_days_for_booking';
 	public const KEY_MIN_REMAINING_LEASE_KM_PERCENT = 'min_remaining_lease_km_percent';
 
-	public function __construct(private IConfig $config) {}
+	public function __construct(
+		private IConfig $config,
+		private ?TimezoneCatalog $timezones = null,
+		private ?CurrencyCatalog $currencies = null,
+	) {
+		$this->timezones ??= new TimezoneCatalog();
+		$this->currencies ??= new CurrencyCatalog();
+	}
+
+	public function currencyDecimals(): int
+	{
+		return $this->currencies->decimalsFor($this->currency());
+	}
 
 	/** @return array<string,mixed> */
 	public function all(): array
 	{
 		return [
 			'currency' => $this->currency(),
+			'currencyDecimals' => $this->currencyDecimals(),
 			'defaultVatBp' => $this->defaultVatBp(),
 			'defaultTimezone' => $this->defaultTimezone(),
 			'approvalWorkflow' => $this->approvalWorkflowEnabled(),
@@ -117,7 +130,8 @@ class SettingsService
 
 	public function currency(): string
 	{
-		return $this->config->getAppValue(Application::APP_ID, self::KEY_CURRENCY, 'EUR');
+		$raw = strtoupper(trim($this->config->getAppValue(Application::APP_ID, self::KEY_CURRENCY, 'EUR')));
+		return $this->currencies->isSupported($raw) ? $raw : 'EUR';
 	}
 
 	public function defaultVatBp(): int
@@ -127,7 +141,8 @@ class SettingsService
 
 	public function defaultTimezone(): string
 	{
-		return $this->config->getAppValue(Application::APP_ID, self::KEY_DEFAULT_TIMEZONE, 'Europe/Berlin');
+		$raw = trim($this->config->getAppValue(Application::APP_ID, self::KEY_DEFAULT_TIMEZONE, 'Europe/Berlin'));
+		return $this->timezones->isValid($raw) ? $raw : 'Europe/Berlin';
 	}
 
 	public function approvalWorkflowEnabled(): bool
@@ -405,9 +420,9 @@ class SettingsService
 	/** @param array<string,mixed> $payload */
 	public function save(array $payload): array
 	{
-		$this->setIfPresent($payload, self::KEY_CURRENCY, fn ($v) => is_string($v) && preg_match('/^[A-Z]{3}$/', $v) ? $v : 'EUR');
+		$this->setIfPresent($payload, self::KEY_CURRENCY, fn ($v) => $this->currencies->normalizeOrThrow(is_string($v) ? $v : ''));
 		$this->setIfPresent($payload, self::KEY_DEFAULT_VAT_BP, fn ($v) => (string)max(0, min(9999, (int)$v)));
-		$this->setIfPresent($payload, self::KEY_DEFAULT_TIMEZONE, fn ($v) => in_array($v, \DateTimeZone::listIdentifiers(), true) ? $v : 'Europe/Berlin');
+		$this->setIfPresent($payload, self::KEY_DEFAULT_TIMEZONE, fn ($v) => $this->timezones->normalizeOrThrow(is_string($v) ? $v : ''));
 		$this->setIfPresent($payload, self::KEY_APPROVAL_WORKFLOW, fn ($v) => $v ? '1' : '0');
 		$this->setIfPresent($payload, self::KEY_APPROVAL_MODE, function ($v) {
 			$s = is_string($v) ? trim($v) : '';
