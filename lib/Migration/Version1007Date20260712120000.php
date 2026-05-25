@@ -28,8 +28,8 @@ class Version1007Date20260712120000 extends SimpleMigrationStep
 		if (!$schema->hasTable('mc_rate_limits')) {
 			$t = $schema->createTable('mc_rate_limits');
 			$t->addColumn('id', Types::BIGINT, ['autoincrement' => true, 'notnull' => true]);
-			$t->addColumn('user_id', Types::STRING, ['length' => 64, 'notnull' => true, 'default' => '']);
-			$t->addColumn('ip', Types::STRING, ['length' => 64, 'notnull' => true, 'default' => '']);
+			$t->addColumn('user_id', Types::STRING, ['length' => 64, 'notnull' => false, 'default' => '']);
+			$t->addColumn('ip', Types::STRING, ['length' => 64, 'notnull' => false, 'default' => '']);
 			$t->addColumn('bucket', Types::STRING, ['length' => 64, 'notnull' => true]);
 			$t->addColumn('hit_at', Types::DATETIME, ['notnull' => true]);
 			$t->setPrimaryKey(['id']);

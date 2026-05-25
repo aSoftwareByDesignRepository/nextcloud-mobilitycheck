@@ -102,4 +102,9 @@ Ein vollständiger Carsharing- und Fuhrpark-Arbeitsbereich für Organisationen m
 		<admin>OCA\MobilityCheck\Settings\AdminSettings</admin>
 		<admin-section>OCA\MobilityCheck\Settings\AdminSection</admin-section>
 	</settings>
+	<repair-steps>
+		<uninstall>
+			<step>OCA\MobilityCheck\Repair\UninstallDropTables</step>
+		</uninstall>
+	</repair-steps>
 </info>

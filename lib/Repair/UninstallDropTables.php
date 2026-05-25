@@ -1,0 +1,138 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * SPDX-FileCopyrightText: 2026 Nextcloud DB-Standards (auto-generated)
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ *
+ * Drops every table the mobilitycheck app has ever created, migration rows, and app config.
+ * Runs on app disable and before app files are removed (see core Installer / settings).
+ *
+ * Regenerate via:
+ *     php scripts/check-nextcloud-db-standards.php sync-uninstall --app=mobilitycheck
+ *
+ * Uses `DROP TABLE IF EXISTS` (not SchemaWrapper) so IDBConnection injection works on
+ * all Nextcloud versions. MySQL temporarily disables FK checks so legacy FK chains
+ * (e.g. project_files → projects) cannot block uninstall.
+ */
+namespace OCA\MobilityCheck\Repair;
+
+use OCP\IConfig;
+use OCP\IDBConnection;
+use OCP\Migration\IOutput;
+use OCP\Migration\IRepairStep;
+
+final class UninstallDropTables implements IRepairStep
+{
+	public const APP_ID = 'mobilitycheck';
+
+	/**
+	 * Sorted list of every table this app has ever created across all migrations.
+	 * Kept in sync by the DB-standards linter.
+	 */
+	public const TABLES = [
+		'mc_audit_log',
+		'mc_booking_approvals',
+		'mc_booking_reassign_sug',
+		'mc_bookings',
+		'mc_checkout_logs',
+		'mc_cost_categories',
+		'mc_cost_centres',
+		'mc_cost_entries',
+		'mc_damage_photos',
+		'mc_damage_reports',
+		'mc_driver_profiles',
+		'mc_export_downloads',
+		'mc_instruction_records',
+		'mc_licence_verifications',
+		'mc_line_manager_assignments',
+		'mc_logbook_entries',
+		'mc_maintenance_schedules',
+		'mc_notification_log',
+		'mc_odometer_readings',
+		'mc_private_vehicles',
+		'mc_rate_limits',
+		'mc_reim_rate_cfg',
+		'mc_reimbursement_claims',
+		'mc_relocation_tasks',
+		'mc_repair_jobs',
+		'mc_search_profiles',
+		'mc_stations',
+		'mc_user_preferences',
+		'mc_user_roles',
+		'mc_vehicle_assignments',
+		'mc_vehicle_features',
+		'mc_vehicle_group_members',
+		'mc_vehicles',
+	];
+
+	public function __construct(
+		private readonly IDBConnection $connection,
+		private readonly IConfig $config,
+	) {
+	}
+
+	public function getName(): string
+	{
+		return 'Drop mobilitycheck tables and install metadata on uninstall';
+	}
+
+	public function run(IOutput $output): void
+	{
+		$provider = $this->connection->getDatabaseProvider();
+		$fkChecksDisabled = false;
+		if ($provider === IDBConnection::PLATFORM_MYSQL) {
+			$this->connection->executeStatement('SET FOREIGN_KEY_CHECKS=0');
+			$fkChecksDisabled = true;
+		}
+
+		$dropped = 0;
+		foreach (self::TABLES as $table) {
+			if ($this->dropLogicalTableIfExists($table)) {
+				$dropped++;
+			}
+		}
+
+		if ($fkChecksDisabled) {
+			$this->connection->executeStatement('SET FOREIGN_KEY_CHECKS=1');
+		}
+
+		$qb = $this->connection->getQueryBuilder();
+		$qb->delete('migrations')
+			->where($qb->expr()->eq('app', $qb->createNamedParameter(self::APP_ID)));
+		$migrationsRemoved = $qb->executeStatement();
+
+		$this->config->deleteAppValues(self::APP_ID);
+
+		$output->info(sprintf(
+			'mobilitycheck: dropped %d of %d table(s); removed %d migration row(s) and app config.',
+			$dropped,
+			count(self::TABLES),
+			$migrationsRemoved,
+		));
+	}
+
+	private function dropLogicalTableIfExists(string $logicalTable): bool
+	{
+		if (!$this->connection->tableExists($logicalTable)) {
+			return false;
+		}
+
+		$prefix = (string)$this->config->getSystemValue('dbtableprefix', 'oc_');
+		$physical = $prefix . $logicalTable;
+		$provider = $this->connection->getDatabaseProvider();
+
+		if ($provider === IDBConnection::PLATFORM_MYSQL) {
+			$this->connection->executeStatement(sprintf('DROP TABLE IF EXISTS `%s`', $physical));
+		} elseif ($provider === IDBConnection::PLATFORM_POSTGRES) {
+			$this->connection->executeStatement(sprintf('DROP TABLE IF EXISTS "%s" CASCADE', $physical));
+		} elseif ($provider === IDBConnection::PLATFORM_ORACLE) {
+			$this->connection->executeStatement(sprintf('DROP TABLE %s CASCADE CONSTRAINTS', $physical));
+		} elseif ($provider === IDBConnection::PLATFORM_SQLITE) {
+			$this->connection->executeStatement(sprintf('DROP TABLE IF EXISTS "%s"', $physical));
+		}
+
+		return true;
+	}
+}
