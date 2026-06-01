@@ -49,7 +49,8 @@ final class CurrencyCatalogTest extends TestCase
 
 	public function testMobilityCheckMoneyUsesCatalogDecimals(): void
 	{
-		$this->assertSame(0, MobilityCheckMoney::decimalToMinor('500', 'JPY'));
+		// JPY has 0 minor-unit decimals: ¥500 is stored as 500 minor units (yen).
+		$this->assertSame(500, MobilityCheckMoney::decimalToMinor('500', 'JPY'));
 		$this->assertSame(12345, MobilityCheckMoney::decimalToMinor('123.45', 'RUB'));
 	}
 }
