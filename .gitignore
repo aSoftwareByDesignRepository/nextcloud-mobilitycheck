@@ -1,3 +1,6 @@
+# Internal docs (Förderung, Fortschritt, Antrag — not in public app repo)
+docs/
+
 # Dependencies
 vendor/
 node_modules/
