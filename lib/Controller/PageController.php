@@ -485,6 +485,7 @@ class PageController extends Controller
 	{
 		$userId = $this->access->currentUserId();
 
+		Util::addTranslations(Application::APP_ID);
 		Util::addStyle(Application::APP_ID, 'common/tokens');
 		Util::addStyle(Application::APP_ID, 'app');
 		Util::addScript(Application::APP_ID, 'common/api');
