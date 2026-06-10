@@ -637,7 +637,7 @@
         "Leave unchanged to accept the driver’s figure.": "Laissez inchangé pour accepter la figure du conducteur.",
         "Leaving both on default follows each vehicle’s configured depot.": "Laisser les deux par défaut suit le dépôt configuré de chaque véhicule.",
         "Left": "Gauche",
-        "Licence": "Licence",
+        "Licence": "Permis",
         "Licence expiry": "Expiration de la licence",
         "Licence for %1$s expires in %2$d days (%3$s).": "La licence pour %1$s expire dans les jours %2$d (%3$s).",
         "Licence marked as rejected.": "Licence marquée comme rejetée.",

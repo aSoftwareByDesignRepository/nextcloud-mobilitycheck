@@ -9,6 +9,9 @@
 	<name lang="de">MobilityCheck</name>
 	<summary>Corporate carsharing and fleet management for organisations</summary>
 	<summary lang="de">Firmen-Carsharing und Fuhrparkverwaltung für Organisationen</summary>
+	<summary lang="fr">Autopartage d'entreprise et gestion de flotte pour les organisations</summary>
+	<summary lang="da">Virksomhedscarsharing og flådestyring for organisationer</summary>
+	<summary lang="es">Carsharing corporativo y gestión de flotas para organizaciones</summary>
 	<description><![CDATA[
 # MobilityCheck
 
@@ -23,7 +26,7 @@ A complete carsharing and fleet-management workspace for organisations that oper
 - **Maintenance** — calendar + odometer-driven schedules with optional blocking
 - **Access governance** — directory restriction, delegated app administrators, per-role permission matrix
 - **Accessibility** — interface targets WCAG 2.1 AA; responsive from 320px width
-- **Bilingual** — German (Sie-Form) and English shipped together; every string lives in `l10n`
+- **Multilingual** — German (Sie-Form), English, French, Danish, and Spanish; every string lives in `l10n`
 
 ## Requirements
 
@@ -45,13 +48,79 @@ Ein vollständiger Carsharing- und Fuhrpark-Arbeitsbereich für Organisationen m
 - **Wartung** — kalender- und kilometerbasierte Pläne, optional buchungssperrend
 - **Zugriffsgovernance** — Verzeichnisbeschränkung, delegierte App-Administratoren, feingranulare Rollenmatrix
 - **Barrierefreiheit** — WCAG 2.1 AA als Ziel; responsives Layout ab 320 px
-- **Zweisprachig** — Deutsch (Sie-Form) und Englisch, jede Zeichenkette in `l10n`
+- **Mehrsprachig** — Deutsch (Sie-Form), Englisch, Französisch, Dänisch und Spanisch; jede Zeichenkette in `l10n`
 
 ## Voraussetzungen
 
 - Nextcloud 32–33
 - PHP 8.2–8.4
 - MySQL/MariaDB, PostgreSQL oder SQLite
+	]]></description>
+	<description lang="fr"><![CDATA[
+# MobilityCheck
+
+Un espace de travail complet pour l'autopartage et la gestion de flotte des organisations qui exploitent des véhicules de société en Allemagne. MobilityCheck regroupe catalogue de véhicules, conformité conducteur (permis, instruction annuelle), réservations avec prévention des conflits, dommages et réparations, coûts, planning de maintenance et journal d'activité vérifiable — dans un seul espace Nextcloud, sans SaaS tiers ni données quittant votre serveur.
+
+## Points forts
+
+- **Moteur de réservation** avec prévention des conflits côté serveur, workflow d'approbation optionnel, propositions de replanification automatique
+- **Conformité conducteur** — journal de vérification du permis, instruction annuelle (Fahrunterweisung), rappels d'expiration
+- **Dommages et réparations** — rapports immuables, photos dans Files, affectation atelier, factures de réparation
+- **Coûts** — carburant, réparation, assurance, taxe, amendes, stationnement ; calcul net/TVA/brut strictement en centimes d'euro
+- **Maintenance** — planning calendrier et kilométrage, blocage optionnel des réservations
+- **Gouvernance d'accès** — restriction annuaire, administrateurs d'application délégués, matrice de permissions par rôle
+- **Accessibilité** — interface visant WCAG 2.1 AA ; responsive dès 320 px de largeur
+- **Multilingue** — allemand (Sie-Form), anglais, français, danois et espagnol ; chaque chaîne dans `l10n`
+
+## Prérequis
+
+- Nextcloud 32–33
+- PHP 8.2–8.4
+- MySQL/MariaDB, PostgreSQL ou SQLite
+	]]></description>
+	<description lang="da"><![CDATA[
+# MobilityCheck
+
+Et komplet carsharing- og flådestyringsarbejdsområde for organisationer med firmabiler i Tyskland. MobilityCheck samler køretøjskatalog, chauffør-compliance (kørekort, årlig kørselsinstruktion), bookinger med konfliktforebyggelse, skader og reparationer, omkostninger, vedligeholdelsesplaner og verificerbar aktivitetslog i ét Nextcloud-arbejdsområde — uden tredjeparts-SaaS og uden at data forlader din server.
+
+## Højdepunkter
+
+- **Bookingmotor** med server-side konfliktforebyggelse, valgfri godkendelsesworkflow og automatiske omplaneringsforslag
+- **Chauffør-compliance** — log for kørekortkontrol, årlig kørselsinstruktion (Fahrunterweisung), udløbspåmindelser
+- **Skader og reparation** — uforanderlige skaderapporter, fotos i Files, værkstedsfordeling, reparationsfakturaer
+- **Omkostninger** — brændstof, reparation, forsikring, afgift, bøder, parkering; netto/moms/brutto kun i eurocent
+- **Vedligeholdelse** — kalender- og kilometertabeller med valgfri bookingblokering
+- **Adgangsstyring** — katalogbegrænsning, delegerede app-administratorer, rollebaseret tilladelsesmatrix
+- **Tilgængelighed** — grænseflade med mål WCAG 2.1 AA; responsiv fra 320 px bredde
+- **Flersproget** — tysk (Sie-Form), engelsk, fransk, dansk og spansk; alle strenge i `l10n`
+
+## Krav
+
+- Nextcloud 32–33
+- PHP 8.2–8.4
+- MySQL/MariaDB, PostgreSQL eller SQLite
+	]]></description>
+	<description lang="es"><![CDATA[
+# MobilityCheck
+
+Un espacio de trabajo completo de carsharing y gestión de flotas para organizaciones con vehículos de empresa en Alemania. MobilityCheck reúne catálogo de vehículos, cumplimiento del conductor (permiso, instrucción anual), reservas con prevención de conflictos, daños y reparaciones, costes, planes de mantenimiento y registro de actividad verificable — en un solo espacio de Nextcloud, sin SaaS de terceros ni datos que salgan de tu servidor.
+
+## Destacados
+
+- **Motor de reservas** con prevención de conflictos en el servidor, flujo de aprobación opcional y propuestas de reprogramación automática
+- **Cumplimiento del conductor** — registro de verificación del permiso, instrucción anual (Fahrunterweisung), recordatorios de caducidad
+- **Daños y reparaciones** — informes inmutables, fotos en Files, asignación de taller, facturas de reparación
+- **Costes** — combustible, reparación, seguro, impuesto, multas, aparcamiento; cálculo neto/IVA/bruto solo en céntimos de euro
+- **Mantenimiento** — calendarios por fecha y odómetro, con bloqueo opcional de reservas
+- **Gobernanza de acceso** — restricción de directorio, administradores de app delegados, matriz de permisos por rol
+- **Accesibilidad** — interfaz orientada a WCAG 2.1 AA; diseño responsive desde 320 px de ancho
+- **Multilingüe** — alemán (Sie-Form), inglés, francés, danés y español; cada cadena en `l10n`
+
+## Requisitos
+
+- Nextcloud 32–33
+- PHP 8.2–8.4
+- MySQL/MariaDB, PostgreSQL o SQLite
 	]]></description>
 	<version>0.4.5</version>
 	<licence>AGPL-3.0-or-later</licence>
