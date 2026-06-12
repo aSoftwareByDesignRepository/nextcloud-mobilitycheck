@@ -8,6 +8,8 @@ use OCA\MobilityCheck\BackgroundJob\BookingApprovalEscalationJob;
 use OCA\MobilityCheck\BackgroundJob\BookingNoShowJob;
 use OCA\MobilityCheck\BackgroundJob\BookingOverdueJob;
 use OCA\MobilityCheck\Listener\UserDeletedListener;
+use OCA\MobilityCheck\Repair\EnsureMobilityCheckSchema;
+use OCA\MobilityCheck\Repair\UninstallDropTables;
 use OCA\MobilityCheck\Middleware\AppAccessMiddleware;
 use OCA\MobilityCheck\Notification\Notifier;
 use OCA\MobilityCheck\Service\AccessControlService;
@@ -450,6 +452,20 @@ class Application extends App implements IBootstrap
 		$context->registerNotifierService(Notifier::class);
 		$context->registerMiddleware(AppAccessMiddleware::class);
 		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
+
+		$context->registerService(EnsureMobilityCheckSchema::class, function ($c): EnsureMobilityCheckSchema {
+			return new EnsureMobilityCheckSchema(
+				$c->query(\OCP\IDBConnection::class),
+				$c->query(\OCP\IConfig::class),
+			);
+		});
+
+		$context->registerService(UninstallDropTables::class, function ($c): UninstallDropTables {
+			return new UninstallDropTables(
+				$c->query(\OCP\IDBConnection::class),
+				$c->query(\OCP\IConfig::class),
+			);
+		});
 	}
 
 	public function boot(IBootContext $context): void
