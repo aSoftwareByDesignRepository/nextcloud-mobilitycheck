@@ -127,7 +127,7 @@ Un espacio de trabajo completo de carsharing y gestión de flotas para organizac
 - PHP 8.2–8.4
 - MySQL/MariaDB, PostgreSQL o SQLite
 	]]></description>
-	<version>0.4.5</version>
+	<version>0.4.6</version>
 	<licence>AGPL-3.0-or-later</licence>
 	<author mail="info@software-by-design.de" homepage="http://nextcloud.software-by-design.de">Alexander Mäule</author>
 	<namespace>MobilityCheck</namespace>
@@ -137,8 +137,8 @@ Un espacio de trabajo completo de carsharing y gestión de flotas para organizac
 	<bugs>https://github.com/aSoftwareByDesignRepository/nextcloud-mobilitycheck/issues</bugs>
 	<repository>https://github.com/aSoftwareByDesignRepository/nextcloud-mobilitycheck.git</repository>
 	<dependencies>
-		<nextcloud min-version="32" max-version="33"/>
-		<php min-version="8.2" max-version="8.4"/>
+		<nextcloud min-version="32" max-version="34"/>
+		<php min-version="8.2" max-version="8.5"/>
 		<database>mysql</database>
 		<database>pgsql</database>
 		<database>sqlite</database>
