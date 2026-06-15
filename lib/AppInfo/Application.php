@@ -7,6 +7,7 @@ namespace OCA\MobilityCheck\AppInfo;
 use OCA\MobilityCheck\BackgroundJob\BookingApprovalEscalationJob;
 use OCA\MobilityCheck\BackgroundJob\BookingNoShowJob;
 use OCA\MobilityCheck\BackgroundJob\BookingOverdueJob;
+use OCA\MobilityCheck\Listener\GroupDeletedListener;
 use OCA\MobilityCheck\Listener\UserDeletedListener;
 use OCA\MobilityCheck\Repair\EnsureMobilityCheckSchema;
 use OCA\MobilityCheck\Repair\UninstallDropTables;
@@ -55,6 +56,7 @@ use OCP\INavigationManager;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
 use OCP\L10N\IFactory;
+use OCP\Group\Events\GroupDeletedEvent;
 use OCP\User\Events\UserDeletedEvent;
 
 /**
@@ -452,6 +454,7 @@ class Application extends App implements IBootstrap
 		$context->registerNotifierService(Notifier::class);
 		$context->registerMiddleware(AppAccessMiddleware::class);
 		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
+		$context->registerEventListener(GroupDeletedEvent::class, GroupDeletedListener::class);
 
 		$context->registerService(EnsureMobilityCheckSchema::class, function ($c): EnsureMobilityCheckSchema {
 			return new EnsureMobilityCheckSchema(

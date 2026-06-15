@@ -51,6 +51,7 @@ final class UninstallDropTables implements IRepairStep
 		'mc_damage_reports',
 		'mc_driver_profiles',
 		'mc_export_downloads',
+		'mc_group_roles',
 		'mc_instruction_records',
 		'mc_licence_verifications',
 		'mc_line_manager_assignments',

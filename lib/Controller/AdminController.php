@@ -59,9 +59,18 @@ class AdminController extends BaseApiController
 			$this->access->requireFleetAdminOrManager($this->access->currentUserId());
 			$search = (string)($this->request->getParam('search', '') ?? '');
 			$groups = $this->groupManager->search($search);
+			$roleByGid = [];
+			foreach ($this->access->listGroupRoleAssignments() as $assignment) {
+				$roleByGid[$assignment['gid']] = $assignment['roles'];
+			}
 			$out = [];
 			foreach ($groups as $group) {
-				$out[] = ['id' => $group->getGID(), 'displayName' => $group->getDisplayName()];
+				$gid = $group->getGID();
+				$out[] = [
+					'id' => $gid,
+					'displayName' => $group->getDisplayName(),
+					'roles' => $roleByGid[$gid] ?? [],
+				];
 			}
 			return $out;
 		});
@@ -128,6 +137,35 @@ class AdminController extends BaseApiController
 			$roles = $this->request->getParam('roles', []);
 			$this->access->setUserRoles($userId, is_array($roles) ? $roles : []);
 			return ['userId' => $userId, 'roles' => $this->access->getRoles($userId)];
+		});
+	}
+
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function listGroupRoles(): DataResponse
+	{
+		return $this->wrap(function (): array {
+			$this->access->requireFleetAdmin($this->access->currentUserId());
+			return [
+				'roles' => AccessControlService::GROUP_ASSIGNABLE_ROLES,
+				'assignments' => $this->access->listGroupRoleAssignments(),
+			];
+		});
+	}
+
+	#[NoAdminRequired]
+	public function setGroupRoles(): DataResponse
+	{
+		return $this->wrap(function (): array {
+			$this->access->requireFleetAdmin($this->access->currentUserId());
+			$payload = $this->payload();
+			$groupId = trim((string)($payload['groupId'] ?? $this->request->getParam('groupId', '') ?? ''));
+			$roles = $payload['roles'] ?? $this->request->getParam('roles', []);
+			$this->access->setGroupRoles($groupId, is_array($roles) ? $roles : []);
+			return [
+				'groupId' => $groupId,
+				'assignments' => $this->access->listGroupRoleAssignments(),
+			];
 		});
 	}
 

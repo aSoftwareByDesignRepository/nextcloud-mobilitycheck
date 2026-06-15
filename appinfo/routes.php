@@ -162,6 +162,8 @@ return [
 		['name' => 'admin#auditLog', 'url' => '/api/admin/audit-log', 'verb' => 'GET'],
 		['name' => 'admin#listRoles', 'url' => '/api/admin/roles', 'verb' => 'GET'],
 		['name' => 'admin#setRoles', 'url' => '/api/admin/roles', 'verb' => 'POST'],
+		['name' => 'admin#listGroupRoles', 'url' => '/api/admin/group-roles', 'verb' => 'GET'],
+		['name' => 'admin#setGroupRoles', 'url' => '/api/admin/group-roles', 'verb' => 'POST'],
 		['name' => 'admin#settings', 'url' => '/api/admin/settings', 'verb' => 'GET'],
 		['name' => 'admin#saveSettings', 'url' => '/api/admin/settings', 'verb' => 'POST'],
 		['name' => 'admin#approvalConfig', 'url' => '/api/admin/approval-config', 'verb' => 'GET'],

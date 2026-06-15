@@ -23,9 +23,10 @@ use OCP\IUserSession;
  *      must call the matching `require*()` after the middleware
  *      has run.
  *
- * Roles are stored in `mc_user_roles` (one row per user per role).
- * A user may legitimately combine roles (e.g. driver + fleet
- * manager) — effective permissions are the **union**.
+ * Roles are stored in `mc_user_roles` (one row per user per role) and
+ * `mc_group_roles` (one row per Nextcloud group per role). A user may
+ * legitimately combine roles (e.g. driver + fleet manager) — effective
+ * permissions are the **union** of individual and group-inherited roles.
  *
  * Directory restriction and delegated app administrators live in
  * `IConfig` app values, mirroring the sibling apps' key names so
@@ -55,6 +56,15 @@ class AccessControlService
 		self::ROLE_AUDITOR,
 	];
 
+	/** Roles that may be granted via Nextcloud group assignment (not fleet admin). */
+	public const GROUP_ASSIGNABLE_ROLES = [
+		self::ROLE_FLEET_MANAGER,
+		self::ROLE_LINE_MANAGER,
+		self::ROLE_DRIVER,
+		self::ROLE_WORKSHOP,
+		self::ROLE_AUDITOR,
+	];
+
 	/** Roles that grant entry to the standard navigation shell. */
 	public const ROLES_FOR_FULL_SHELL = [
 		self::ROLE_FLEET_ADMIN,
@@ -73,6 +83,9 @@ class AccessControlService
 
 	/** @var array<string, list<string>> roles by user id (per-request cache) */
 	private array $rolesCache = [];
+
+	/** @var array<string, list<string>> */
+	private array $userGroupIdsCache = [];
 
 	public function __construct(
 		private IDBConnection $db,
@@ -138,7 +151,8 @@ class AccessControlService
 	 *  2. App admin (system admin OR `app_admin_user_ids`) ⇒ true.
 	 *  3. Directory restriction on + user not on allow list and
 	 *     not in any allow-listed group ⇒ false (`restriction`).
-	 *  4. No row in `mc_user_roles` ⇒ false (`no_app_role`).
+	 *  4. No MobilityCheck role from individual or group assignment ⇒
+	 *     false (`no_app_role`).
 	 *  5. Otherwise ⇒ true.
 	 */
 	public function canUseApp(string $userId): bool
@@ -193,6 +207,11 @@ class AccessControlService
 			}
 		}
 		$res->closeCursor();
+		foreach ($this->groupRolesForUser($userId) as $groupRole) {
+			if (!in_array($groupRole, $roles, true)) {
+				$roles[] = $groupRole;
+			}
+		}
 		// App / system admins implicitly receive fleet_admin so they can
 		// boot a fresh install. They still bypass `canUseApp` in step 2.
 		if ($this->isAppAdmin($userId) && !in_array(self::ROLE_FLEET_ADMIN, $roles, true)) {
@@ -480,6 +499,160 @@ class AccessControlService
 			throw $e;
 		}
 		unset($this->rolesCache[$userId]);
+	}
+
+	/**
+	 * Roles inherited from Nextcloud groups via `mc_group_roles`.
+	 *
+	 * @return list<string>
+	 */
+	public function groupRolesForUser(string $userId): array
+	{
+		if ($userId === '') {
+			return [];
+		}
+		$gids = $this->userGroupIds($userId);
+		if ($gids === []) {
+			return [];
+		}
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('role')
+			->from('mc_group_roles')
+			->where($qb->expr()->in('gid', $qb->createNamedParameter($gids, \OCP\DB\QueryBuilder\IQueryBuilder::PARAM_STR_ARRAY)));
+		$res = $qb->executeQuery();
+		$roles = [];
+		while (($row = $res->fetch()) !== false) {
+			$role = (string)($row['role'] ?? '');
+			if (in_array($role, self::GROUP_ASSIGNABLE_ROLES, true) && !in_array($role, $roles, true)) {
+				$roles[] = $role;
+			}
+		}
+		$res->closeCursor();
+		return $roles;
+	}
+
+	/**
+	 * @return list<array{gid:string,displayName:string,roles:list<string>}>
+	 */
+	public function listGroupRoleAssignments(): array
+	{
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('gid', 'role')
+			->from('mc_group_roles')
+			->orderBy('gid', 'ASC')
+			->addOrderBy('role', 'ASC');
+		$res = $qb->executeQuery();
+		/** @var array<string, list<string>> */
+		$byGid = [];
+		while (($row = $res->fetch()) !== false) {
+			$gid = (string)($row['gid'] ?? '');
+			$role = (string)($row['role'] ?? '');
+			if ($gid === '' || !in_array($role, self::GROUP_ASSIGNABLE_ROLES, true)) {
+				continue;
+			}
+			if (!isset($byGid[$gid])) {
+				$byGid[$gid] = [];
+			}
+			if (!in_array($role, $byGid[$gid], true)) {
+				$byGid[$gid][] = $role;
+			}
+		}
+		$res->closeCursor();
+		$out = [];
+		foreach ($byGid as $gid => $roles) {
+			$group = $this->groupManager->get($gid);
+			$out[] = [
+				'gid' => $gid,
+				'displayName' => $group !== null ? $group->getDisplayName() : $gid,
+				'roles' => $roles,
+			];
+		}
+		usort($out, static fn (array $a, array $b): int => strcmp($a['gid'], $b['gid']));
+		return $out;
+	}
+
+	/**
+	 * Replace every MobilityCheck group role for the given Nextcloud group.
+	 *
+	 * @param list<string> $roles
+	 */
+	public function setGroupRoles(string $gid, array $roles): void
+	{
+		$gid = trim($gid);
+		if ($gid === '') {
+			throw new \InvalidArgumentException('INVALID_GROUP_ID');
+		}
+		if (!$this->groupManager->groupExists($gid)) {
+			throw new \InvalidArgumentException('INVALID_GROUP');
+		}
+		$valid = [];
+		foreach ($roles as $r) {
+			$r = (string)$r;
+			if (in_array($r, self::GROUP_ASSIGNABLE_ROLES, true) && !in_array($r, $valid, true)) {
+				$valid[] = $r;
+			}
+		}
+		$this->db->beginTransaction();
+		try {
+			$del = $this->db->getQueryBuilder();
+			$del->delete('mc_group_roles')->where($del->expr()->eq('gid', $del->createNamedParameter($gid)));
+			$del->executeStatement();
+			foreach ($valid as $role) {
+				$ins = $this->db->getQueryBuilder();
+				$ins->insert('mc_group_roles')
+					->values([
+						'gid' => $ins->createNamedParameter($gid),
+						'role' => $ins->createNamedParameter($role),
+						'created_at' => $ins->createNamedParameter(gmdate('Y-m-d H:i:s')),
+					]);
+				$ins->executeStatement();
+			}
+			$this->db->commit();
+		} catch (\Throwable $e) {
+			$this->db->rollBack();
+			throw $e;
+		}
+		$this->rolesCache = [];
+	}
+
+	/**
+	 * Remove group role rows and any directory allow-list entry for a deleted
+	 * or de-provisioned Nextcloud group.
+	 */
+	public function purgeGroup(string $gid): void
+	{
+		if ($gid === '') {
+			return;
+		}
+		$qb = $this->db->getQueryBuilder();
+		$qb->delete('mc_group_roles')
+			->where($qb->expr()->eq('gid', $qb->createNamedParameter($gid)));
+		$qb->executeStatement();
+
+		$allowedGroups = $this->getAllowedGroupIds();
+		$filtered = array_values(array_filter(
+			$allowedGroups,
+			static fn (string $id): bool => $id !== $gid,
+		));
+		if ($filtered !== $allowedGroups) {
+			$this->config->setAppValue(
+				Application::APP_ID,
+				self::KEY_ACCESS_ALLOWED_GROUP_IDS,
+				json_encode($filtered, JSON_THROW_ON_ERROR),
+			);
+		}
+		$this->rolesCache = [];
+	}
+
+	private function userGroupIds(string $userId): array
+	{
+		if (!array_key_exists($userId, $this->userGroupIdsCache)) {
+			$user = $userId !== '' ? $this->userManager->get($userId) : null;
+			$this->userGroupIdsCache[$userId] = $user === null
+				? []
+				: array_values($this->groupManager->getUserGroupIds($user));
+		}
+		return $this->userGroupIdsCache[$userId];
 	}
 
 	private function userMatchesAllowList(string $userId): bool
