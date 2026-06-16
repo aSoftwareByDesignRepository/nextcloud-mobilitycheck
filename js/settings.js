@@ -12,6 +12,7 @@
 	const t = M.t;
 
 	const ROLES = ['fleet_admin', 'fleet_manager', 'line_manager', 'driver', 'workshop', 'auditor'];
+	const GROUP_ROLES = ROLES.filter((role) => role !== 'fleet_admin');
 
 	const ROLE_LABELS = {
 		fleet_admin: t('Fleet admin'),
@@ -305,6 +306,8 @@
 	}
 
 	let userSearchTimer = null;
+	let groupSearchTimer = null;
+	let groupAssignments = [];
 	function debounceLoadUsers(value) {
 		if (userSearchTimer) clearTimeout(userSearchTimer);
 		userSearchTimer = setTimeout(() => loadUsers(value), 200);
@@ -344,6 +347,82 @@
 		try {
 			await API.post('/api/admin/roles', { userId, roles });
 			M.toast(t('Roles updated for {user}.').replace('{user}', userId), 'success');
+		} catch (e) { M.reportError(e); }
+	}
+
+	function debounceLoadGroups(value) {
+		if (groupSearchTimer) clearTimeout(groupSearchTimer);
+		groupSearchTimer = setTimeout(() => loadGroups(value), 200);
+	}
+
+	async function loadGroupRoles() {
+		try {
+			const data = await API.get('/api/admin/group-roles');
+			groupAssignments = data.assignments || [];
+			renderGroupAssignmentsTable();
+		} catch (e) { M.reportError(e); }
+	}
+
+	function rolesForGroup(gid) {
+		const row = groupAssignments.find((a) => a.gid === gid);
+		return row ? (row.roles || []) : [];
+	}
+
+	function renderGroupAssignmentsTable() {
+		const host = document.getElementById('mc-set-group-assignments');
+		if (!host) return;
+		C.renderTable(host, [
+			{ key: 'gid', label: t('Group ID') },
+			{ key: 'displayName', label: t('Display name') },
+			{
+				key: 'roles', label: t('Roles'), render: (r) => (r.roles || []).map((role) => ROLE_LABELS[role] || role).join(', ') || '—',
+			},
+		], groupAssignments, {
+			ariaLabel: t('Current group role assignments'),
+			emptyHeading: t('No group role assignments yet.'),
+			emptyDescription: t('Search for a group above and assign roles.'),
+		});
+	}
+
+	async function loadGroups(search) {
+		const host = document.getElementById('mc-set-groups');
+		if (!host) return;
+		C.setLoading(host, true);
+		try {
+			const groups = await API.get('/api/admin/groups', { search });
+			C.setLoading(host, false);
+			C.renderTable(host, [
+				{ key: 'id', label: t('Group ID') },
+				{ key: 'displayName', label: t('Display name') },
+				{
+					key: 'roles', label: t('Roles'), render: (r) => {
+						const wrap = C.h('div', { class: 'mc-taglist' });
+						const current = rolesForGroup(r.id).length ? rolesForGroup(r.id) : (r.roles || []);
+						GROUP_ROLES.forEach((role) => {
+							const id = 'mc-gr-' + r.id + '-' + role;
+							const checked = current.indexOf(role) !== -1;
+							wrap.appendChild(C.h('label', { class: 'mc-checkbox-row', for: id }, [
+								C.h('input', { type: 'checkbox', id, checked, dataset: { group: r.id, role } }),
+								C.h('span', null, ROLE_LABELS[role] || role),
+							]));
+						});
+						return wrap;
+					},
+				},
+				{ key: 'actions', label: t('Actions'), render: (r) => C.h('button', { type: 'button', class: 'button button-primary', onClick: () => saveGroupRoles(r.id) }, t('Save group roles')) },
+			], groups, { ariaLabel: t('Group role assignment'), emptyHeading: t('No groups match your search.'), emptyDescription: t('Try a different name or group ID.') });
+		} catch (e) { C.setLoading(host, false); M.reportError(e); }
+	}
+
+	async function saveGroupRoles(groupId) {
+		const roles = Array.from(document.querySelectorAll('input[data-group="' + CSS.escape(groupId) + '"]:checked')).map((el) => el.dataset.role);
+		try {
+			const data = await API.post('/api/admin/group-roles', { groupId, roles });
+			groupAssignments = data.assignments || [];
+			M.toast(t('Roles updated for {group}.').replace('{group}', groupId), 'success');
+			renderGroupAssignmentsTable();
+			const search = document.getElementById('mc-set-gq');
+			if (search) loadGroups(search.value);
 		} catch (e) { M.reportError(e); }
 	}
 
@@ -441,6 +520,8 @@
 		document.getElementById('mc-set-lm-add')?.addEventListener('submit', saveLm);
 		const search = document.getElementById('mc-set-q');
 		search?.addEventListener('input', () => debounceLoadUsers(search.value));
+		const groupSearch = document.getElementById('mc-set-gq');
+		groupSearch?.addEventListener('input', () => debounceLoadGroups(groupSearch.value));
 		const auf = document.getElementById('mc-set-audit-filters');
 		auf?.addEventListener('input', (ev) => {
 			if (!ev.target || !ev.target.name) return;
@@ -449,7 +530,7 @@
 				debounceLoadAudit();
 			}
 		});
-		loadPolicy(); loadOps(); loadUsers(''); loadAudit(); loadLmAssignments();
+		loadPolicy(); loadOps(); loadUsers(''); loadGroupRoles(); loadGroups(''); loadAudit(); loadLmAssignments();
 	}
 	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
 	else init();

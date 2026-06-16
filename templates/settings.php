@@ -29,6 +29,10 @@ $isAppAdmin = !empty($_['isAppAdmin']);
 		</div>
 	</header>
 	<form id="mc-set-policy" class="mc-form" novalidate <?php if (!$isAppAdmin): ?>aria-disabled="true"<?php endif; ?>>
+		<div class="mc-callout mc-callout--info" role="note" aria-labelledby="mc-set-access-gate-h">
+			<p id="mc-set-access-gate-h"><strong><?php p($l->t('This list controls the door, not the roles.')); ?></strong></p>
+			<p class="mc-callout__hint"><?php p($l->t('Adding a user or group here only lets them open MobilityCheck. Members still need at least one MobilityCheck role below (assigned to them directly or via a group).')); ?></p>
+		</div>
 		<div class="mc-grid-2">
 			<div class="mc-form-row">
 				<label for="mc-set-mode"><?php p($l->t('Access mode')); ?></label>
@@ -48,8 +52,8 @@ $isAppAdmin = !empty($_['isAppAdmin']);
 				<textarea id="mc-set-groups" name="allowedGroups" rows="3" placeholder="<?php p($l->t('One group ID per line')); ?>" aria-describedby="mc-set-groups-hint mc-set-groups-err" readonly></textarea>
 			<?php endif; ?>
 			<p class="mc-form-row__hint" id="mc-set-groups-hint"><?php p($isAppAdmin
-				? $l->t('Pick groups from the directory — one entry per chip. The list below stays in sync for saving.')
-				: $l->t('Nextcloud group IDs (one per line). Members of any listed group can open MobilityCheck.')); ?></p>
+				? $l->t('Pick groups from the directory — one entry per chip. Members can pass the directory gate when restriction is on, but still need a MobilityCheck role below.')
+				: $l->t('Nextcloud group IDs (one per line). Members can pass the directory gate when restriction is on, but still need a MobilityCheck role below.')); ?></p>
 			<p class="mc-form-row__error" id="mc-set-groups-err" role="alert"></p>
 		</div>
 		<div class="mc-form-row">
@@ -282,6 +286,25 @@ $isAppAdmin = !empty($_['isAppAdmin']);
 		</div>
 	</form>
 	<div id="mc-set-lm-list"></div>
+</section>
+
+<section class="mc-card mc-section" aria-labelledby="mc-set-grp-roles-h">
+	<header class="mc-section__header">
+		<div>
+			<h2 id="mc-set-grp-roles-h"><?php p($l->t('Group role assignment')); ?></h2>
+			<p class="mc-section__sub"><?php p($l->t('Assign MobilityCheck roles to Nextcloud groups. Members inherit the union of their individual roles and every group they belong to. Fleet admin stays individual-only for accountability.')); ?></p>
+		</div>
+	</header>
+	<form id="mc-set-group-search" class="mc-toolbar" role="search" aria-label="<?php p($l->t('Group search')); ?>">
+		<div class="mc-form-row">
+			<label for="mc-set-gq"><?php p($l->t('Search groups')); ?></label>
+			<input id="mc-set-gq" name="search" type="search" placeholder="<?php p($l->t('Start typing a group name or ID…')); ?>" autocomplete="off">
+			<p class="mc-form-row__hint"><?php p($l->t('Matches Nextcloud display names and group IDs. Pick a group, tick the right roles, then “Save group roles”.')); ?></p>
+		</div>
+	</form>
+	<div id="mc-set-groups" aria-live="polite"></div>
+	<h3 class="mc-section__sub" id="mc-set-grp-table-h"><?php p($l->t('Current group role assignments')); ?></h3>
+	<div id="mc-set-group-assignments" aria-live="polite" aria-labelledby="mc-set-grp-table-h"></div>
 </section>
 
 <section class="mc-card mc-section" aria-labelledby="mc-set-roles-h">
