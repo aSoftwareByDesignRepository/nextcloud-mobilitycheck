@@ -1,8 +1,7 @@
 <?php
 
 declare(strict_types=1);
-
-namespace OCAMobilityCheckTestsNITAPPINFO;
+namespace OCA\MobilityCheck\Tests\Unit\AppInfo;
 
 use OCP\IConfig;
 use PHPUnit\Framework\TestCase;
