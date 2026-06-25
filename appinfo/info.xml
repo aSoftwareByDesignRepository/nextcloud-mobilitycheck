@@ -175,7 +175,10 @@ Un espacio de trabajo completo de carsharing y gestión de flotas para organizac
 	<settings>
 		<admin>OCA\MobilityCheck\Settings\AdminSettings</admin>
 		<admin-section>OCA\MobilityCheck\Settings\AdminSection</admin-section>
-	</settings>
+	</settings>	<commands>
+		<command>OCA\MobilityCheck\Command\UpgradeBackupCommand</command>
+	</commands>
+
 	<repair-steps>
 		<install>
 			<step>OCA\MobilityCheck\Repair\EnsureMobilityCheckSchema</step>
@@ -186,5 +189,8 @@ Un espacio de trabajo completo de carsharing y gestión de flotas para organizac
 		<uninstall>
 			<step>OCA\MobilityCheck\Repair\UninstallDropTables</step>
 		</uninstall>
-	</repair-steps>
+		<pre-migration>
+			<step>OCA\MobilityCheck\Repair\BackupBeforeUpdate</step>
+		</pre-migration>
+</repair-steps>
 </info>

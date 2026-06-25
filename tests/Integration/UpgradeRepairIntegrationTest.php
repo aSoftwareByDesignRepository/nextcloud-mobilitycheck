@@ -6,6 +6,7 @@ namespace OCA\MobilityCheck\Tests\Integration;
 
 use OCA\MobilityCheck\Repair\EnsureMobilityCheckSchema;
 use OCA\MobilityCheck\Repair\UninstallDropTables;
+use OCA\MobilityCheck\Repair\BackupBeforeUpdate;
 use OCP\Migration\IOutput;
 use Test\TestCase;
 
@@ -16,6 +17,7 @@ class UpgradeRepairIntegrationTest extends TestCase
 		foreach ([
 			EnsureMobilityCheckSchema::class,
 			UninstallDropTables::class,
+			BackupBeforeUpdate::class,
 		] as $class) {
 			$step = \OC::$server->get($class);
 			$this->assertInstanceOf($class, $step);
